@@ -1,0 +1,261 @@
+package com.zfx.wanandroidcompose.feature.knowledge.ui
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.zfx.wanandroidcompose.R
+import com.zfx.wanandroidcompose.data.Article
+import com.zfx.wanandroidcompose.feature.knowledge.KnowledgeViewModel
+import com.zfx.wanandroidcompose.navigation.Routes
+import com.zfx.wanandroidcompose.navigation.navigateToLink
+
+
+/**
+ * 体系列表组件（支持分页加载和下拉刷新）
+ * 使用 Material3 的 PullToRefreshBox 实现下拉刷新
+ * 
+ * @param modifier 修饰符
+ */
+@Composable
+fun KnowledgeItemList(
+    cid: Int,
+    navController: NavController,
+    modifier: Modifier = Modifier.fillMaxWidth()
+) {
+
+    val viewModel = remember(cid) {
+        KnowledgeViewModel(cid = cid)
+    }
+
+    val articleList by viewModel.articleList.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val hasMore by viewModel.hasMore.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
+    val listState = rememberLazyListState()
+
+    // Material3 的 PullToRefresh 状态
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    // 监听滚动到底部，自动加载更多
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val totalItemsCount = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+
+            // 当滚动到倒数第 3 个 item 时，触发加载更多（提前加载，提升体验）
+            totalItemsCount > 0 && lastVisibleItemIndex >= totalItemsCount - 3
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore && !isLoading && hasMore && !isRefreshing) {
+            viewModel.loadMore()
+        }
+    }
+
+    // 判断是否显示空列表
+    val shouldShowEmpty = articleList.isEmpty() && !isLoading && !isRefreshing
+
+    if (shouldShowEmpty) {
+        // 空列表状态
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "暂无数据",
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.nav_unselected),
+                textAlign = TextAlign.Center
+            )
+        }
+    } else {
+        // 使用 Material3 的 PullToRefreshBox
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = { viewModel.refresh() },
+            state = pullToRefreshState,
+            modifier = modifier,
+            indicator = {
+                Indicator(
+                    isRefreshing = isRefreshing,
+                    state = pullToRefreshState,
+                    color = colorResource(R.color.theme),
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
+            }
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = listState,
+                contentPadding = PaddingValues(bottom = 8.dp)
+            ) {
+                // 文章列表项
+                items(
+                    items = articleList,
+                    key = { knowledge -> "${knowledge.id}" }
+                ) { knowledge ->
+                    KnowledgeItemListItem(
+                        data = knowledge,
+                        cardClick = {
+                            navController.navigateToLink(knowledge.title, knowledge.link)
+                        }
+                    )
+                }
+
+                // 加载更多指示器
+                if (isLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                color = colorResource(id = R.color.nav_selected)
+                            )
+                        }
+                    }
+                } else if (!hasMore && articleList.isNotEmpty()) {
+                    // 没有更多数据提示
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "没有更多数据了",
+                                fontSize = 14.sp,
+                                color = colorResource(id = R.color.nav_unselected),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun KnowledgeItemListItem(
+    data : Article,
+    cardClick : () -> Unit
+){
+
+    Card(
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp))
+            .clickable { cardClick() },
+        shape = RoundedCornerShape(8.dp),
+        colors = CardColors(
+            contentColor = colorResource(id = R.color.white),
+            containerColor = colorResource(id = R.color.white),
+            disabledContentColor = colorResource(id = R.color.white),
+            disabledContainerColor = colorResource(id = R.color.white)
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_article_logo),
+                    contentDescription = "文章图标",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = data.niceDate,
+                    fontSize = 12.sp,
+                    color = colorResource(id = R.color.nav_unselected)
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                text = data.title,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.black)
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Image(
+                    modifier = Modifier
+                        .size(24.dp),
+                    painter = painterResource(id = if(data.collect){
+                        R.drawable.icon_heart_blue
+                    }else{
+                        R.drawable.icon_heart_grey
+                    }),
+                    contentDescription = "收藏图标"
+                )
+            }
+
+        }
+    }
+}
+

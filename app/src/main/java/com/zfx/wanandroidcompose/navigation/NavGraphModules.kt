@@ -1,0 +1,148 @@
+package com.zfx.wanandroidcompose.navigation
+
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import com.zfx.wanandroidcompose.feature.account.ui.AccountInScreen
+import com.zfx.wanandroidcompose.feature.home.ui.HomeScreen
+import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeDetailScreen
+import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeScreen
+import com.zfx.wanandroidcompose.feature.link.LinkScreen
+import com.zfx.wanandroidcompose.feature.search.ui.SearchScreen
+import com.zfx.wanandroidcompose.feature.square.ui.SquareScreen
+import com.zfx.wanandroidcompose.feature.us.AboutUsScreen
+import com.zfx.wanandroidcompose.feature.wechat.ui.WechatScreen
+import com.zfx.wanandroidcompose.util.KnowledgeItemCache
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
+
+/**
+ * 导航配置参数
+ */
+data class NavConfig(
+    val navController: NavController,
+    val onToggleBars: (Boolean) -> Unit = {},
+    val drawerState: androidx.compose.material3.DrawerState? = null,
+    val nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null
+)
+
+/**
+ * 主页面导航配置（Home, Knowledge, Wechat, Square）
+ */
+fun NavGraphBuilder.setupMainNavigation(config: NavConfig) {
+    // Home
+    composableWithSlideAnimation(route = Routes.HOME) {
+        HomeScreen(
+            navController = config.navController,
+            onToggleBars = config.onToggleBars,
+            drawerState = config.drawerState,
+            nestedScrollConnection = config.nestedScrollConnection
+        )
+    }
+
+
+    // Square
+    composableWithSlideAnimation(route = Routes.SQUARE) {
+        SquareScreen(
+            navController = config.navController,
+            onToggleBars = config.onToggleBars,
+            nestedScrollConnection = config.nestedScrollConnection
+        )
+    }
+    
+    // Knowledge
+    composableWithSlideAnimation(route = Routes.KNOWLEDGE) {
+        KnowledgeScreen(
+            navController = config.navController,
+            onToggleBars = config.onToggleBars,
+            nestedScrollConnection = config.nestedScrollConnection
+        )
+    }
+    
+    // Wechat
+    composableWithSlideAnimation(route = Routes.WECHAT) {
+        WechatScreen(
+            navController = config.navController,
+            onToggleBars = config.onToggleBars,
+            nestedScrollConnection = config.nestedScrollConnection
+        )
+    }
+
+}
+
+/**
+ * 详情页导航配置（KnowledgeDetail, Link）
+ */
+fun NavGraphBuilder.setupDetailNavigation(config: NavConfig) {
+    // Knowledge Detail (通过缓存传递 KnowledgeItem)
+    composableWithSlideAnimation(route = Routes.KNOWLEDGE_DETAIL) { backStackEntry ->
+        // 使用 remember 配合 backStackEntry.id 作为 key，确保每个导航实例有独立的数据
+        val knowledgeItem = remember(backStackEntry.id) {
+            val item = KnowledgeItemCache.getAndClear()
+            // 如果获取到数据，立即重新缓存，这样即使重组也能获取到
+            if (item != null) {
+                KnowledgeItemCache.cache(item)
+            }
+            item
+        }
+        
+        // 如果 remember 中的数据为空（可能是重组时），尝试从缓存重新获取
+        val finalKnowledgeItem = knowledgeItem ?: KnowledgeItemCache.get()
+        
+        // 只在首次进入时检查数据有效性，避免返回时重复检查
+        LaunchedEffect(backStackEntry.id) {
+            if (finalKnowledgeItem == null || finalKnowledgeItem.children.isEmpty()) {
+                // 如果数据无效，返回上一页（只在首次进入时检查）
+                config.navController.popBackStack()
+            } else {
+                // 确保数据在缓存中，这样返回时也能获取到
+                KnowledgeItemCache.cache(finalKnowledgeItem)
+            }
+        }
+        
+        // 显示详情页（只有在数据有效时才显示）
+        if (finalKnowledgeItem != null && finalKnowledgeItem.children.isNotEmpty()) {
+            KnowledgeDetailScreen(
+                data = finalKnowledgeItem,
+                navController = config.navController
+            )
+        }
+    }
+    
+    // Link (带参数)
+    composableWithSlideAnimation(route = Routes.LINK) { backStackEntry ->
+        val encodedTitle = backStackEntry.arguments?.getString("title") ?: ""
+        val encodedLinkUrl = backStackEntry.arguments?.getString("linkUrl") ?: ""
+        val title = URLDecoder.decode(encodedTitle, StandardCharsets.UTF_8.toString())
+        val linkUrl = URLDecoder.decode(encodedLinkUrl, StandardCharsets.UTF_8.toString())
+        LinkScreen(
+            title = title,
+            linkUrl = linkUrl,
+            navController = config.navController,
+            onToggleBars = config.onToggleBars
+        )
+    }
+}
+
+/**
+ * 其他页面导航配置（Account, AboutUs）
+ */
+fun NavGraphBuilder.setupOtherNavigation(config: NavConfig) {
+    // About Us
+    composableWithSlideAnimation(route = Routes.ABOUT_US) {
+        AboutUsScreen(navController = config.navController)
+    }
+
+    // Account
+    composableWithSlideAnimation(route = Routes.ACCOUNT) {
+        AccountInScreen(navController = config.navController)
+    }
+
+
+    // Account
+    composableWithSlideAnimation(route = Routes.SEARCH) {
+        SearchScreen(navController = config.navController)
+    }
+}
+
