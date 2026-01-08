@@ -170,6 +170,37 @@ LaunchedEffect(listState) {
 val navState = rememberNavState(navController)
 ```
 
+## 📸 截图预览
+
+<div align="center">
+
+### 首页
+展示 Banner 轮播、置顶文章和文章列表，支持下拉刷新和上拉加载更多。
+
+<img src="screenshots/Screenshot_20260108_173730.png" alt="首页" width="280"/>
+
+### 公众号
+浏览微信公众号文章，支持多个公众号切换查看。
+
+<img src="screenshots/Screenshot_20260108_173809.png" alt="公众号" width="280"/>
+
+### 侧边抽屉导航
+便捷的侧边栏导航，快速访问收藏和关于我们等功能。
+
+<img src="screenshots/Screenshot_20260108_173826.png" alt="侧边抽屉导航" width="280"/>
+
+### 知识体系
+分类浏览开发资源，包括常用网站、优秀博客、开发社区等。
+
+<img src="screenshots/Screenshot_20260108_173845.png" alt="知识体系" width="280"/>
+
+### 广场
+用户广场动态，分享优质内容。
+
+<img src="screenshots/Screenshot_20260108_173900.png" alt="广场" width="280"/>
+
+</div>
+
 ## 📚 学习要点
 
 本项目适合学习以下内容：
