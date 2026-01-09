@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -103,7 +104,7 @@ fun NavigationScreen(
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(48.dp),
-                color = androidx.compose.ui.res.colorResource(id = R.color.nav_selected),
+                color = MaterialTheme.colorScheme.primary,
                 strokeWidth = 4.dp
             )
         }
@@ -133,7 +134,7 @@ fun NavigationScreen(
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
-                    .background(color = colorResource(R.color.white))
+                    .background(color = MaterialTheme.colorScheme.onPrimary)
                     .then(
                         nestedScrollConnection?.let {
                             Modifier.nestedScroll(it)
@@ -174,7 +175,7 @@ fun NavigationItem(item: NavigationJson,navController: NavController? = null) {
     ) {
         Text(
             text = item.name ?: "",
-            color = colorResource(R.color.black),
+            color = MaterialTheme.colorScheme.surface,
             fontSize = 18.sp
         )
 

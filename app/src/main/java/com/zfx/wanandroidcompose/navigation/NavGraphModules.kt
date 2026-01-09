@@ -10,6 +10,7 @@ import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeDetailScreen
 import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeScreen
 import com.zfx.wanandroidcompose.feature.link.LinkScreen
 import com.zfx.wanandroidcompose.feature.search.ui.SearchScreen
+import com.zfx.wanandroidcompose.feature.setting.ui.SettingScreen
 import com.zfx.wanandroidcompose.feature.square.ui.SquareScreen
 import com.zfx.wanandroidcompose.feature.us.AboutUsScreen
 import com.zfx.wanandroidcompose.feature.wechat.ui.WechatScreen
@@ -24,7 +25,8 @@ data class NavConfig(
     val navController: NavController,
     val onToggleBars: (Boolean) -> Unit = {},
     val drawerState: androidx.compose.material3.DrawerState? = null,
-    val nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null
+    val nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null,
+    val settingViewModel: com.zfx.wanandroidcompose.feature.setting.SettingViewModel? = null
 )
 
 /**
@@ -143,6 +145,14 @@ fun NavGraphBuilder.setupOtherNavigation(config: NavConfig) {
     // Account
     composableWithSlideAnimation(route = Routes.SEARCH) {
         SearchScreen(navController = config.navController)
+    }
+
+    // Setting
+    composableWithSlideAnimation(route = Routes.SETTING) {
+        SettingScreen(
+            navController = config.navController,
+            viewModel = config.settingViewModel
+        )
     }
 }
 

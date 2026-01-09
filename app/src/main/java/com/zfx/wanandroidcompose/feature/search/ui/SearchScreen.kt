@@ -64,10 +64,13 @@ fun SearchScreen(
     // 控制是否显示搜索结果
     val showResults = query.isNotBlank() && searchResults.isNotEmpty()
     
+    // 在 Composable 中获取颜色，用于 drawBehind
+    val backgroundColor = MaterialTheme.colorScheme.onPrimary
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.white))
+            .background(MaterialTheme.colorScheme.onPrimary)
     ) {
 
         Row(
@@ -75,7 +78,7 @@ fun SearchScreen(
                 .fillMaxWidth()
                 .height(68.dp)
                 .background(
-                    color = colorResource(R.color.theme)
+                    color = MaterialTheme.colorScheme.primary
                 ),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -89,6 +92,7 @@ fun SearchScreen(
                     .clickable {
                         navController.popBackStack() },
                 painter = painterResource(R.drawable.icon_back_white),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "返回按钮"
             )
             Spacer(
@@ -117,7 +121,7 @@ fun SearchScreen(
                         placeholder = { 
                             Text(
                                 text = "搜索文章、作者...",
-                                color = colorResource(R.color.color_FF8A8A8A)
+                                color = MaterialTheme.colorScheme.onTertiary
                             ) 
                         },
                         leadingIcon = {
@@ -133,7 +137,7 @@ fun SearchScreen(
                                 Icon(
                                     imageVector = Icons.Default.Search,
                                     contentDescription = "搜索",
-                                    tint = colorResource(R.color.color_FF8A8A8A)
+                                    tint = MaterialTheme.colorScheme.onTertiary
                                 )
                             }
                         },
@@ -143,23 +147,23 @@ fun SearchScreen(
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "清除",
-                                        tint = colorResource(R.color.color_FF8A8A8A)
+                                        tint = MaterialTheme.colorScheme.onTertiary
                                     )
                                 }
                             }
                         },
                         // 自定义输入框内部颜色
                         colors = SearchBarDefaults.inputFieldColors(
-                            focusedContainerColor = colorResource(R.color.white), // 聚焦时输入框背景色（白色）
-                            unfocusedContainerColor = colorResource(R.color.white), // 未聚焦时输入框背景色（白色）
-                            focusedTextColor = colorResource(R.color.black), // 聚焦时文本颜色
-                            unfocusedTextColor = colorResource(R.color.black), // 未聚焦时文本颜色
-                            focusedPlaceholderColor = colorResource(R.color.color_FF8A8A8A), // 聚焦时占位符颜色
-                            unfocusedPlaceholderColor = colorResource(R.color.color_FF8A8A8A), // 未聚焦时占位符颜色
-                            focusedLeadingIconColor = colorResource(R.color.color_FF8A8A8A), // 聚焦时前导图标颜色
-                            unfocusedLeadingIconColor = colorResource(R.color.color_FF8A8A8A), // 未聚焦时前导图标颜色
-                            focusedTrailingIconColor = colorResource(R.color.color_FF8A8A8A), // 聚焦时后置图标颜色
-                            unfocusedTrailingIconColor = colorResource(R.color.color_FF8A8A8A) // 未聚焦时后置图标颜色
+                            focusedContainerColor = MaterialTheme.colorScheme.onPrimary, // 聚焦时输入框背景色（白色）
+                            unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary, // 未聚焦时输入框背景色（白色）
+                            focusedTextColor = MaterialTheme.colorScheme.surface, // 聚焦时文本颜色
+                            unfocusedTextColor = MaterialTheme.colorScheme.surface, // 未聚焦时文本颜色
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onTertiary, // 聚焦时占位符颜色
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onTertiary, // 未聚焦时占位符颜色
+                            focusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary, // 聚焦时前导图标颜色
+                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary, // 未聚焦时前导图标颜色
+                            focusedTrailingIconColor = MaterialTheme.colorScheme.onTertiary, // 聚焦时后置图标颜色
+                            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onTertiary // 未聚焦时后置图标颜色
                         )
                     )
                 },
@@ -168,16 +172,16 @@ fun SearchScreen(
                 // 自定义 SearchBar 外观
                 shape = RoundedCornerShape(20.dp), // 圆角（可根据需要调整，如 16.dp, 24.dp 等）
                 colors = SearchBarDefaults.colors(
-                    containerColor = colorResource(R.color.white) // SearchBar 容器背景色
+                    containerColor = MaterialTheme.colorScheme.onPrimary // SearchBar 容器背景色
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 0.dp, vertical = 0.dp) // 自定义 SearchBar 外部 padding（可根据需要调整）
                     .drawBehind {
-                        // 绘制白色矩形覆盖下划线区域，去除下划线
-                        // 注意：drawBehind 中不能使用 @Composable 函数，需要使用 Color.White
+                        // 绘制矩形覆盖下划线区域，去除下划线
+                        // 注意：drawBehind 中不能使用 @Composable 函数，需要在外部获取颜色
                         drawRect(
-                            color = Color.White,
+                            color = backgroundColor,  // 使用外部获取的颜色
                             topLeft = androidx.compose.ui.geometry.Offset(0f, size.height - 2.dp.toPx()),
                             size = androidx.compose.ui.geometry.Size(size.width, 2.dp.toPx())
                         )
@@ -268,10 +272,10 @@ fun SearchSuggestions(
                         text = "搜索历史",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(R.color.black)
+                        color = MaterialTheme.colorScheme.surface
                     )
                     TextButton(onClick = onClearHistory) {
-                        Text("清除", fontSize = 14.sp)
+                        Text("清除", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                 }
             }
@@ -303,13 +307,13 @@ fun SearchSuggestions(
                         text = "热门搜索",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(R.color.black)
+                        color = MaterialTheme.colorScheme.surface
                     )
 
                     Image(
                         painter = painterResource(R.drawable.icon_hot_white),
                         modifier = Modifier.size(16.dp), // 设置图标大小
-                        colorFilter = ColorFilter.tint(color = colorResource(R.color.color_FFD81E06)),
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.error),
                         contentDescription = "火热图标"
                     )
                 }
@@ -361,10 +365,10 @@ fun DefaultSearchContent(
                         text = "搜索历史",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(R.color.black)
+                        color = MaterialTheme.colorScheme.surface
                     )
                     TextButton(onClick = onClearHistory) {
-                        Text("清除", fontSize = 14.sp)
+                        Text("清除", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                 }
             }
@@ -391,7 +395,7 @@ fun DefaultSearchContent(
                     text = "热门搜索",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorResource(R.color.black)
+                    color = MaterialTheme.colorScheme.surface
                 )
             }
             
@@ -428,7 +432,7 @@ fun SearchResultsList(
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(
-                color = colorResource(R.color.theme)
+                color = MaterialTheme.colorScheme.primary
             )
         }
     } else if (results.isEmpty()) {
@@ -439,7 +443,7 @@ fun SearchResultsList(
             Text(
                 text = "暂无搜索结果",
                 fontSize = 16.sp,
-                color = colorResource(R.color.color_FF8A8A8A)
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     } else {
@@ -476,9 +480,9 @@ fun SearchChip(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
         color = if (isHot) {
-            colorResource(R.color.theme).copy(alpha = 0.1f)
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
         } else {
-            colorResource(R.color.color_FFF5F5F5)
+            MaterialTheme.colorScheme.tertiary
         },
         modifier = Modifier.padding(0.dp)
     ) {
@@ -487,9 +491,9 @@ fun SearchChip(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             fontSize = 14.sp,
             color = if (isHot) {
-                colorResource(R.color.theme)
+                MaterialTheme.colorScheme.primary
             } else {
-                colorResource(R.color.black)
+                MaterialTheme.colorScheme.surface
             }
         )
     }

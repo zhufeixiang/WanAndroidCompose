@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -99,7 +100,7 @@ fun HomeScreen(
                                         .size(8.dp)
                                         .clip(CircleShape)
                                         .background(
-                                            if (index == curPage) Color.White else Color.Gray
+                                            if (index == curPage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
                                         )
                                 )
                             }

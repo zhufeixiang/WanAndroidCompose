@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,10 +53,10 @@ fun VerticalScrollableTabRow(
     tabs: List<String>,
     onTabSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = colorResource(R.color.color_FFF7F7F7),
-    selectedTabColor: Color = colorResource(R.color.theme),
-    unselectedTabColor: Color = colorResource(R.color.theme).copy(alpha = 0.7f),
-    indicatorColor: Color = colorResource(R.color.theme)
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    selectedTabColor: Color = MaterialTheme.colorScheme.primary,
+    unselectedTabColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+    indicatorColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val listState = rememberLazyListState()
     

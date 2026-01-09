@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -52,8 +53,8 @@ fun WechatScreen(
 
             PrimaryScrollableTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                containerColor = colorResource(R.color.theme),
-                contentColor = colorResource(R.color.white),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 edgePadding = 0.dp, // 移除左右边距
                 // 不设置 minTabWidth，让 Tab 根据内容自适应宽度
                 indicator = {
@@ -64,7 +65,7 @@ fun WechatScreen(
                             selectedTabIndex = pagerState.currentPage,
                             matchContentSize = true
                         ),
-                        color = colorResource(R.color.white),   // 指示器颜色
+                        color = MaterialTheme.colorScheme.onPrimary,   // 指示器颜色
                         height = 2.dp                // 指示器高度
                     )
                 }
@@ -80,7 +81,7 @@ fun WechatScreen(
                         text = {
                             Text(
                                 text = title,
-                                color = colorResource(R.color.white),
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 16.sp
                             )
                         }

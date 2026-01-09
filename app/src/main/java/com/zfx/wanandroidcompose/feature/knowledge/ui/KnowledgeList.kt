@@ -22,10 +22,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
@@ -54,7 +56,7 @@ fun KnowledgeList(
             Text(
                 text = "暂无数据",
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.nav_unselected),
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
         }
@@ -104,10 +106,10 @@ fun KnowledgeItem(
             .clickable { cardClick() },
         shape = RoundedCornerShape(8.dp),
         colors = CardColors(
-            containerColor = colorResource(id = R.color.white),
-            contentColor = colorResource(id = R.color.white),
-            disabledContentColor = colorResource(id = R.color.white),
-            disabledContainerColor = colorResource(id = R.color.white)
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.tertiary,
+            disabledContentColor = MaterialTheme.colorScheme.tertiary,
+            disabledContainerColor = MaterialTheme.colorScheme.tertiary
         )
     ) {
         Row(
@@ -122,7 +124,7 @@ fun KnowledgeItem(
 
                 Text(
                     text = "${data.name}",
-                    color = colorResource(id = R.color.black),
+                    color = MaterialTheme.colorScheme.surface,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -139,7 +141,7 @@ fun KnowledgeItem(
                         Text(
                             modifier = Modifier.padding(PaddingValues(horizontal = 2.dp, vertical = 2.dp)),
                             text = child.name,
-                            color = colorResource(id = R.color.nav_unselected),
+                            color = MaterialTheme.colorScheme.onTertiary,
                             fontSize = 12.sp
                         )
                     }
@@ -152,6 +154,7 @@ fun KnowledgeItem(
                     .size(24.dp)
                     .align(Alignment.CenterVertically),
                 painter = painterResource(id = R.drawable.icon_arrow_right_gray),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary),
                 contentDescription = "向右箭头"
             )
         }

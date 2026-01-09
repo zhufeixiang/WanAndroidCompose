@@ -6,12 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -21,6 +25,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,17 +38,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blankj.utilcode.util.ToastUtils
+import com.zfx.wanandroidcompose.feature.setting.SettingViewModel
+import com.zfx.wanandroidcompose.feature.setting.SettingViewModelFactory
 import com.zfx.wanandroidcompose.navigation.Routes
 import com.zfx.wanandroidcompose.navigation.setupNavigation
 import com.zfx.wanandroidcompose.navigation.rememberNavState
 import com.zfx.wanandroidcompose.ui.components.BottomNavigationBar
 import com.zfx.wanandroidcompose.ui.components.DrawerContent
 import com.zfx.wanandroidcompose.ui.components.ScrollableTopBar
+import com.zfx.wanandroidcompose.ui.theme.AppTheme
+import com.zfx.wanandroidcompose.ui.theme.WanAndroidComposeTheme
 import com.zfx.wanandroidcompose.util.NavControllerManager
 
 class MainActivity : ComponentActivity(){
@@ -56,7 +68,16 @@ class MainActivity : ComponentActivity(){
 
     @Composable
     private fun MainScreen() {
-        AppPortrait()
+        val context = LocalContext.current
+        val settingViewModel: SettingViewModel = viewModel(
+            factory = SettingViewModelFactory(context)
+        )
+        val theme by settingViewModel.curTheme.collectAsState()
+        WanAndroidComposeTheme(
+            theme = theme
+        ){
+            AppPortrait(settingViewModel = settingViewModel)
+        }
     }
 
 
@@ -65,7 +86,7 @@ class MainActivity : ComponentActivity(){
      */
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun AppPortrait() {
+    private fun AppPortrait(settingViewModel: SettingViewModel) {
         val navController = rememberNavController()
         
         // 注册 NavController 到全局管理器
@@ -149,7 +170,8 @@ class MainActivity : ComponentActivity(){
                             navController = navController,
                             onToggleBars = { show -> barsVisible.value = show },
                             drawerState = drawerState,
-                            nestedScrollConnection = scrollBehavior.nestedScrollConnection
+                            nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+                            settingViewModel = settingViewModel
                         )
                     }
                     

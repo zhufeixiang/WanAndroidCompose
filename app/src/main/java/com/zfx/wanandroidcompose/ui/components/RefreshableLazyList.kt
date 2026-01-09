@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -103,7 +104,7 @@ fun <T> RefreshableLazyList(
             Text(
                 text = emptyMessage,
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.nav_unselected),
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
         }
@@ -119,7 +120,7 @@ fun <T> RefreshableLazyList(
                     isRefreshing = isRefreshing,
                     state = pullToRefreshState,
                     modifier = Modifier.align(Alignment.TopCenter),
-                    color = colorResource(R.color.theme)
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         ) {
@@ -162,7 +163,7 @@ fun <T> RefreshableLazyList(
                         ) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
-                                color = colorResource(id = R.color.nav_selected)
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
@@ -178,7 +179,7 @@ fun <T> RefreshableLazyList(
                             Text(
                                 text = "没有更多数据了",
                                 fontSize = 14.sp,
-                                color = colorResource(id = R.color.nav_unselected),
+                                color = MaterialTheme.colorScheme.tertiary,
                                 textAlign = TextAlign.Center
                             )
                         }

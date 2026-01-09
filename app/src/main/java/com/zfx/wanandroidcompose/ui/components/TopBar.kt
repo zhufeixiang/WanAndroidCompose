@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -89,7 +90,7 @@ fun ScrollableTopBar(
         title = {
             Text(
                 text = title,
-                color = colorResource(R.color.white),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.sp
             )
         },
@@ -118,10 +119,10 @@ fun ScrollableTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = colorResource(R.color.theme),
-            titleContentColor = colorResource(R.color.white),
-            navigationIconContentColor = colorResource(R.color.white),
-            actionIconContentColor = colorResource(R.color.white)
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         scrollBehavior = scrollBehavior
     )

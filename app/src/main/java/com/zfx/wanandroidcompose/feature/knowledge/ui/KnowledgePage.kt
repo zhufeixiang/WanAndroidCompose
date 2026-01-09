@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -74,7 +75,7 @@ fun KnowledgePage(
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(48.dp),
-                color = androidx.compose.ui.res.colorResource(id = R.color.nav_selected),
+                color = MaterialTheme.colorScheme.primary,
                 strokeWidth = 4.dp
             )
         }
@@ -124,7 +125,7 @@ fun KnowledgePage(
             Text(
                 text = "暂无数据",
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.nav_unselected),
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
         }

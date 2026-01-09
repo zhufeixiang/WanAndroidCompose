@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.data.Article
+import com.zfx.wanandroidcompose.ui.theme.ColorBlack
+import com.zfx.wanandroidcompose.ui.theme.ColorFF8A8A8A
 
 @Composable
 fun ArticleItem(
@@ -43,10 +47,10 @@ fun ArticleItem(
             .clickable { cardClick() },
         shape = RoundedCornerShape(8.dp),
         colors = CardColors(
-            contentColor = colorResource(id = R.color.white),
-            containerColor = colorResource(id = R.color.white),
-            disabledContentColor = colorResource(id = R.color.white),
-            disabledContainerColor = colorResource(id = R.color.white)
+            contentColor = MaterialTheme.colorScheme.tertiary,
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            disabledContentColor = MaterialTheme.colorScheme.tertiary,
+            disabledContainerColor = MaterialTheme.colorScheme.tertiary
         )
     ) {
         Column(
@@ -62,23 +66,24 @@ fun ArticleItem(
                     Text(
                         modifier = Modifier
                             .background(
-                                color = colorResource(id = R.color.color_FFD81E06).copy(alpha = 0.1f),  // 背景色（主题色，10% 透明度）
+                                color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),  // 背景色（主题色，10% 透明度）
                                 shape = RoundedCornerShape(4.dp)  // 圆角
                             )
                             .border(
                                 width = 1.dp,  // 边框宽度
-                                color = colorResource(id = R.color.color_FFD81E06),  // 边框颜色
+                                color = MaterialTheme.colorScheme.error,  // 边框颜色
                                 shape = RoundedCornerShape(4.dp)  // 圆角（与背景一致）
                             )
                             .padding(horizontal = 6.dp, vertical = 2.dp),  // 内边距,
                         text = "置顶",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(id = R.color.color_FFD81E06)
+                        color = MaterialTheme.colorScheme.error
                     )
                 }else{
                     Image(
                         painter = painterResource(id = R.drawable.icon_article_logo),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         contentDescription = "文章图标",
                         modifier = Modifier.size(24.dp)
                     )
@@ -94,7 +99,7 @@ fun ArticleItem(
                         "分享人:${data.shareUser}"
                     },
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.black)
+                    color = MaterialTheme.colorScheme.surface
                 )
                 Spacer(
                     modifier = Modifier.weight(1f)
@@ -103,7 +108,7 @@ fun ArticleItem(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     text = data.niceDate,
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.nav_unselected)
+                    color = MaterialTheme.colorScheme.onTertiary
                 )
             }
 
@@ -123,7 +128,7 @@ fun ArticleItem(
                     text = data.title,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.black)
+                    color = MaterialTheme.colorScheme.surface
                 )
             }
 
@@ -138,7 +143,7 @@ fun ArticleItem(
                         .align(Alignment.CenterVertically),
                     text = "${data.chapterName}/${data.superChapterName}",
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.nav_selected)
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(
                     modifier = Modifier.weight(1f)

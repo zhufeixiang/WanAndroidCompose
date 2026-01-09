@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
@@ -42,7 +43,7 @@ fun AboutUsScreen(
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text("关于我们", color = colorResource(R.color.white), fontSize = 16.sp)
+                    Text("关于我们", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
                 },
                 navigationIcon = {
                     IconButton(
@@ -52,18 +53,18 @@ fun AboutUsScreen(
                     ) {
                         Icon(
                             Icons.Default.ArrowBack,
-                            tint = colorResource(R.color.white),
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             contentDescription = "返回"
                         )
                     }
                 },
                 scrollBehavior = scrollBehavior,
                 colors = TopAppBarColors(
-                    colorResource(R.color.theme),
-                    colorResource(R.color.theme),
-                    colorResource(R.color.theme),
-                    colorResource(R.color.theme),
-                    colorResource(R.color.theme)
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -80,7 +81,7 @@ fun AboutUsScreen(
 
                 Text(
                     text = "Compose版玩Android",
-                    color = colorResource(R.color.black),
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 18.sp
                 )
             }
@@ -110,7 +111,7 @@ fun AboutUsScreen(
                             "## View 系统实现方式\n" +
                             "\n" +
                             "### 1. CoordinatorLayout + AppBarLayout + CollapsingToolbarLayout",
-                    color = colorResource(R.color.black),
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp
                 )
             }
@@ -120,7 +121,7 @@ fun AboutUsScreen(
 
                 Text(
                     text = "开源代码地址https://github.com/zhufeixiang/WanAndroidCompose",
-                    color = colorResource(R.color.black),
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp
                 )
             }

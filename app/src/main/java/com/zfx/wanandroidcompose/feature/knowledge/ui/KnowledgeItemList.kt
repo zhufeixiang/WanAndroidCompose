@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
@@ -32,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +46,7 @@ import com.zfx.wanandroidcompose.data.Article
 import com.zfx.wanandroidcompose.feature.knowledge.KnowledgeViewModel
 import com.zfx.wanandroidcompose.navigation.Routes
 import com.zfx.wanandroidcompose.navigation.navigateToLink
+import com.zfx.wanandroidcompose.ui.theme.ColorBlack
 
 
 /**
@@ -103,7 +106,7 @@ fun KnowledgeItemList(
             Text(
                 text = "暂无数据",
                 fontSize = 16.sp,
-                color = colorResource(id = R.color.nav_unselected),
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
         }
@@ -118,7 +121,7 @@ fun KnowledgeItemList(
                 Indicator(
                     isRefreshing = isRefreshing,
                     state = pullToRefreshState,
-                    color = colorResource(R.color.theme),
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.align(Alignment.TopCenter)
                 )
             }
@@ -152,7 +155,7 @@ fun KnowledgeItemList(
                         ) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
-                                color = colorResource(id = R.color.nav_selected)
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
@@ -168,7 +171,7 @@ fun KnowledgeItemList(
                             Text(
                                 text = "没有更多数据了",
                                 fontSize = 14.sp,
-                                color = colorResource(id = R.color.nav_unselected),
+                                color = MaterialTheme.colorScheme.onBackground,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -192,10 +195,10 @@ fun KnowledgeItemListItem(
             .clickable { cardClick() },
         shape = RoundedCornerShape(8.dp),
         colors = CardColors(
-            contentColor = colorResource(id = R.color.white),
-            containerColor = colorResource(id = R.color.white),
-            disabledContentColor = colorResource(id = R.color.white),
-            disabledContainerColor = colorResource(id = R.color.white)
+            contentColor = MaterialTheme.colorScheme.tertiary,
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            disabledContentColor = MaterialTheme.colorScheme.tertiary,
+            disabledContainerColor = MaterialTheme.colorScheme.tertiary
         )
     ) {
         Column(
@@ -208,6 +211,7 @@ fun KnowledgeItemListItem(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.icon_article_logo),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     contentDescription = "文章图标",
                     modifier = Modifier.size(24.dp)
                 )
@@ -218,7 +222,7 @@ fun KnowledgeItemListItem(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     text = data.niceDate,
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.nav_unselected)
+                    color = MaterialTheme.colorScheme.onTertiary
                 )
             }
 
@@ -233,7 +237,7 @@ fun KnowledgeItemListItem(
                 text = data.title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.black)
+                color = MaterialTheme.colorScheme.surface
             )
 
             Row(

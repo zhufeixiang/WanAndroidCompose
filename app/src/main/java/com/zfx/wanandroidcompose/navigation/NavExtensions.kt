@@ -52,6 +52,13 @@ fun NavController.navigateToSquare() {
 }
 
 /**
+ * 导航到设置
+ */
+fun NavController.navigateToSetting() {
+    navigate(Routes.SETTING)
+}
+
+/**
  * 导航到知识详情页
  * @param knowledgeItem 知识体系项（通过缓存传递）
  */

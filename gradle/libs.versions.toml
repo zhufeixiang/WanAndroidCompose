@@ -13,6 +13,7 @@ zfxLib = "2.0.0-beta04"
 navigation = "2.8.0"
 material-icons = "1.5.4"
 material3 = "1.4.0"
+datastore-preferences = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,7 @@ zfx-lib = { group = "com.github.zhufeixiang", name = "jetpack-commonlib", versio
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-compose-material3-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
 
 
 [plugins]

@@ -2,6 +2,7 @@ package com.zfx.wanandroidcompose.ui.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
@@ -31,7 +32,8 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
-        modifier = modifier.height(56.dp)
+        modifier = modifier.height(56.dp),
+        containerColor = MaterialTheme.colorScheme.tertiary
     ) {
         //首页
         NavigationBarItem(
@@ -48,13 +50,14 @@ fun BottomNavigationBar(
             label = {
                 Text(
                     "首页",
-                    color = colorResource(
-                        id = if (currentRoute == Routes.HOME) {
-                            R.color.nav_selected
-                        } else {
-                            R.color.nav_unselected
-                        }
-                    )
+                    color = if (currentRoute == Routes.HOME) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+//                    color = colorResource(
+//                        id = if (currentRoute == Routes.HOME) {
+//                            R.color.nav_selected
+//                        } else {
+//                            R.color.nav_unselected
+//                        }
+//                    )
                 )
             },
             colors = navigationBarItemColors()
@@ -75,13 +78,14 @@ fun BottomNavigationBar(
             label = {
                 Text(
                     "广场",
-                    color = colorResource(
-                        id = if (currentRoute == Routes.SQUARE) {
-                            R.color.nav_selected
-                        } else {
-                            R.color.nav_unselected
-                        }
-                    )
+                    color = if (currentRoute == Routes.SQUARE) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+//                    color = colorResource(
+//                        id = if (currentRoute == Routes.SQUARE) {
+//                            R.color.nav_selected
+//                        } else {
+//                            R.color.nav_unselected
+//                        }
+//                    )
                 )
             },
             colors = navigationBarItemColors()
@@ -102,13 +106,14 @@ fun BottomNavigationBar(
             label = {
                 Text(
                     "公众号",
-                    color = colorResource(
-                        id = if (currentRoute == Routes.WECHAT) {
-                            R.color.nav_selected
-                        } else {
-                            R.color.nav_unselected
-                        }
-                    )
+                    color = if (currentRoute == Routes.WECHAT) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+//                    color = colorResource(
+//                        id = if (currentRoute == Routes.WECHAT) {
+//                            R.color.nav_selected
+//                        } else {
+//                            R.color.nav_unselected
+//                        }
+//                    )
                 )
             },
             colors = navigationBarItemColors()
@@ -129,13 +134,14 @@ fun BottomNavigationBar(
             label = {
                 Text(
                     "知识体系",
-                    color = colorResource(
-                        id = if (currentRoute == Routes.KNOWLEDGE) {
-                            R.color.nav_selected
-                        } else {
-                            R.color.nav_unselected
-                        }
-                    )
+                    color = if (currentRoute == Routes.KNOWLEDGE) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+//                    color = colorResource(
+//                        id = if (currentRoute == Routes.KNOWLEDGE) {
+//                            R.color.nav_selected
+//                        } else {
+//                            R.color.nav_unselected
+//                        }
+//                    )
                 )
             },
             colors = navigationBarItemColors()
@@ -149,11 +155,11 @@ fun BottomNavigationBar(
  */
 @Composable
 private fun navigationBarItemColors(): NavigationBarItemColors = NavigationBarItemDefaults.colors(
-    selectedIconColor = colorResource(id = R.color.nav_selected),
-    selectedTextColor = colorResource(id = R.color.nav_selected),
+    selectedIconColor = MaterialTheme.colorScheme.primary,
+    selectedTextColor = MaterialTheme.colorScheme.primary,
     indicatorColor = Color.Transparent,
-    unselectedIconColor = colorResource(id = R.color.nav_unselected),
-    unselectedTextColor = colorResource(id = R.color.nav_unselected)
+    unselectedIconColor = MaterialTheme.colorScheme.surface,
+    unselectedTextColor = MaterialTheme.colorScheme.surface
 )
 
 

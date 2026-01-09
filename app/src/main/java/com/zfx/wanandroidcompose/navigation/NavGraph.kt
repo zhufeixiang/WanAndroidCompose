@@ -45,6 +45,8 @@ object Routes {
 
     const val SEARCH = "search"
 
+    const val SETTING = "setting"
+
     // 需要显示底部导航栏的路由
     val routesWithBottomBar = setOf(HOME, KNOWLEDGE,WECHAT,SQUARE)
     
@@ -118,13 +120,15 @@ fun NavGraphBuilder.setupNavigation(
     navController: NavController,
     onToggleBars: (Boolean) -> Unit = {},
     drawerState: androidx.compose.material3.DrawerState? = null,
-    nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null
+    nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null,
+    settingViewModel: com.zfx.wanandroidcompose.feature.setting.SettingViewModel? = null
 ) {
     val config = NavConfig(
         navController = navController,
         onToggleBars = onToggleBars,
         drawerState = drawerState,
-        nestedScrollConnection = nestedScrollConnection
+        nestedScrollConnection = nestedScrollConnection,
+        settingViewModel = settingViewModel
     )
     
     // 按功能模块组织导航配置

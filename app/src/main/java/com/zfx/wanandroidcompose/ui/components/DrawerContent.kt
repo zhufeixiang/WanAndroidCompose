@@ -1,13 +1,19 @@
 package com.zfx.wanandroidcompose.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +36,7 @@ import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.navigation.Routes
 import com.zfx.wanandroidcompose.navigation.navigateToAccount
 import com.zfx.wanandroidcompose.navigation.navigateToAboutUs
+import com.zfx.wanandroidcompose.navigation.navigateToSetting
 import com.zfx.wanandroidcompose.util.UserPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -57,7 +65,7 @@ fun DrawerContent(
         modifier = modifier
             .width(260.dp)
             .fillMaxHeight()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.size(28.dp))
@@ -79,7 +87,7 @@ fun DrawerContent(
                     }
                 ),
             painter = painterResource(R.mipmap.icon_app_logo),
-            tint = colorResource(R.color.theme),
+            tint = MaterialTheme.colorScheme.primary,
             contentDescription = "用户头像"
         )
 
@@ -87,61 +95,86 @@ fun DrawerContent(
 
         Text(
             text = userName?.takeIf { it.isNotEmpty() } ?: "请先登录",
-            color = colorResource(R.color.black),
+            color = MaterialTheme.colorScheme.surface,
             fontSize = 16.sp
         )
 
         Spacer(Modifier.size(28.dp))
-        
-        NavigationDrawerItem(
-            label = {
-                Text(
-                    "我的收藏",
-                    color = colorResource(R.color.black),
-                    fontSize = 18.sp
-                )
+
+        DrawerItem(
+            onItemClick = {
+
             },
-            icon = {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.icon_favorite),
-                    tint = colorResource(R.color.theme),
-                    contentDescription = "我的收藏"
-                )
-            },
-            selected = false,
-            onClick = {
-                // TODO: 实现收藏页面导航
-            },
+            imageRes = R.drawable.icon_favorite,
+            name = "我的收藏"
         )
 
         Spacer(Modifier.size(2.dp))
 
-        NavigationDrawerItem(
-            label = {
-                Text(
-                    "关于我们",
-                    color = colorResource(R.color.black),
-                    fontSize = 18.sp
-                )
+        DrawerItem(
+            onItemClick = {
+                scope.launch {
+                    drawerState.close()
+                }
+                navController.navigateToSetting()
             },
-            icon = {
-                Icon(
-                    modifier = Modifier.size(32.dp),
-                    painter = painterResource(id = R.drawable.icon_about_us),
-                    tint = colorResource(R.color.theme),
-                    contentDescription = "关于我们"
-                )
-            },
-            selected = false,
-            onClick = {
+            imageRes = R.drawable.icon_setting,
+            name = "系统设置"
+        )
+
+        Spacer(Modifier.size(2.dp))
+
+        DrawerItem(
+            onItemClick = {
                 scope.launch {
                     drawerState.close()
                 }
                 navController.navigateToAboutUs()
             },
+            imageRes = R.drawable.icon_about_us,
+            name = "关于我们"
         )
+
+
+
     }
+}
+
+@Composable
+fun DrawerItem(
+    onItemClick : () -> Unit,
+    imageRes : Int,
+    name : String
+){
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(48.dp)
+            .clickable{
+                onItemClick()
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Image(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(imageRes),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
+            contentDescription = name
+        )
+
+        Spacer(Modifier.size(24.dp))
+
+        Text(
+            text = name,
+            color = MaterialTheme.colorScheme.surface,
+            fontSize = 14.sp
+        )
+
+    }
+
 }
 
 

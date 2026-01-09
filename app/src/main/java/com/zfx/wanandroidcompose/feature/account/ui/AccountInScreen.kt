@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
@@ -71,31 +75,36 @@ fun AccountInScreen(
     }
 
 
-    // 设置状态栏为白色
+    // 设置状态栏颜色为白色（onPrimary），退出时恢复为主题色
     val view = LocalView.current
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
+    val statusBarColor = MaterialTheme.colorScheme.onPrimary  // 白色背景
+    val primaryColor = MaterialTheme.colorScheme.primary     // 主题色（用于恢复）
+    
+    DisposableEffect(statusBarColor) {
         val window = (view.context as? android.app.Activity)?.window
         window?.let {
-            // 设置状态栏颜色为白色（使用颜色值，不是资源 ID）
-            it.statusBarColor = ContextCompat.getColor(context, R.color.white)
-
+            // 设置状态栏背景色为白色
+            // 使用 @Suppress("DEPRECATION") 抑制废弃警告（在 Android 14 及以下仍可用）
+            @Suppress("DEPRECATION")
+            it.statusBarColor = statusBarColor.toArgb()
+            
             // 设置状态栏图标为深色（因为背景是白色）
             WindowCompat.getInsetsController(it, view).apply {
-                isAppearanceLightStatusBars = true
+                isAppearanceLightStatusBars = true  // 深色图标（浅色背景）
             }
         }
-
+        
         onDispose {
             // 恢复原来的状态栏设置
             val window = (view.context as? android.app.Activity)?.window
             window?.let {
                 // 恢复为主题色
-                it.statusBarColor = ContextCompat.getColor(context, R.color.theme)
-
-                // 恢复状态栏图标为浅色
+                @Suppress("DEPRECATION")
+                it.statusBarColor = primaryColor.toArgb()
+                
+                // 恢复状态栏图标为浅色（主题色通常是深色）
                 WindowCompat.getInsetsController(it, view).apply {
-                    isAppearanceLightStatusBars = false
+                    isAppearanceLightStatusBars = false  // 浅色图标（深色背景）
                 }
             }
         }
@@ -104,7 +113,8 @@ fun AccountInScreen(
 
     Column(
         modifier = modifier
-            .background(color = colorResource(R.color.white))
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
             .padding(vertical = 32.dp, horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -123,6 +133,7 @@ fun AccountInScreen(
                         navController.popBackStack()
                     },
                 painter = painterResource(R.drawable.icon_close_grey),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                 contentDescription = "关闭按钮"
             )
         }
@@ -133,6 +144,7 @@ fun AccountInScreen(
             modifier = Modifier
                 .size(64.dp),
             painter = painterResource(R.drawable.icon_avatar_default),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             contentDescription = "默认头像"
         )
 
@@ -183,10 +195,10 @@ fun AccountInScreen(
         ) {
             Button(
                 colors = ButtonColors(
-                    containerColor = colorResource(R.color.theme),
-                    contentColor = colorResource(R.color.white),
-                    disabledContentColor = colorResource(R.color.color_808A8A8A),
-                    disabledContainerColor = colorResource(R.color.color_808A8A8A)
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContentColor = MaterialTheme.colorScheme.tertiary,
+                    disabledContainerColor = MaterialTheme.colorScheme.tertiary
                 ),
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -208,10 +220,10 @@ fun AccountInScreen(
 
             Button(
                 colors = ButtonColors(
-                    containerColor = colorResource(R.color.theme),
-                    contentColor = colorResource(R.color.white),
-                    disabledContentColor = colorResource(R.color.color_808A8A8A),
-                    disabledContainerColor = colorResource(R.color.color_808A8A8A)
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContentColor = MaterialTheme.colorScheme.tertiary,
+                    disabledContainerColor = MaterialTheme.colorScheme.tertiary
                 ),
                 modifier = Modifier.weight(1f),
                 onClick = {
