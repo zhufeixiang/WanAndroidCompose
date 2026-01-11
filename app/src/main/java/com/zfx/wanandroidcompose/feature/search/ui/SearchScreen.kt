@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,7 +94,7 @@ fun SearchScreen(
                         navController.popBackStack() },
                 painter = painterResource(R.drawable.icon_back_white),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                contentDescription = "返回按钮"
+                contentDescription = stringResource(R.string.search_back_button)
             )
             Spacer(
                 Modifier.size(12.dp)
@@ -120,7 +121,7 @@ fun SearchScreen(
                         onExpandedChange = { active = it },
                         placeholder = { 
                             Text(
-                                text = "搜索文章、作者...",
+                                text = stringResource(R.string.search_placeholder),
                                 color = MaterialTheme.colorScheme.onTertiary
                             ) 
                         },
@@ -136,7 +137,7 @@ fun SearchScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Search,
-                                    contentDescription = "搜索",
+                                    contentDescription = stringResource(R.string.search_icon),
                                     tint = MaterialTheme.colorScheme.onTertiary
                                 )
                             }
@@ -146,7 +147,7 @@ fun SearchScreen(
                                 IconButton(onClick = { query = "" }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = "清除",
+                                        contentDescription = stringResource(R.string.search_clear),
                                         tint = MaterialTheme.colorScheme.onTertiary
                                     )
                                 }
@@ -269,13 +270,13 @@ fun SearchSuggestions(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "搜索历史",
+                        text = stringResource(R.string.search_history),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.surface
                     )
                     TextButton(onClick = onClearHistory) {
-                        Text("清除", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
+                        Text(stringResource(R.string.search_clear_history), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                 }
             }
@@ -304,7 +305,7 @@ fun SearchSuggestions(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "热门搜索",
+                        text = stringResource(R.string.search_hot),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.surface
@@ -314,7 +315,7 @@ fun SearchSuggestions(
                         painter = painterResource(R.drawable.icon_hot_white),
                         modifier = Modifier.size(16.dp), // 设置图标大小
                         colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.error),
-                        contentDescription = "火热图标"
+                        contentDescription = stringResource(R.string.search_hot_icon)
                     )
                 }
             }
@@ -362,13 +363,13 @@ fun DefaultSearchContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "搜索历史",
+                        text = stringResource(R.string.search_history),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.surface
                     )
                     TextButton(onClick = onClearHistory) {
-                        Text("清除", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
+                        Text(stringResource(R.string.search_clear_history), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                 }
             }
@@ -441,7 +442,7 @@ fun SearchResultsList(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "暂无搜索结果",
+                text = stringResource(R.string.search_no_results),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -455,10 +456,11 @@ fun SearchResultsList(
                 items = results,
                 key = { article -> "${article.id}_${article.publishTime}" }
             ) { article ->
+                val articleToast = stringResource(R.string.article_favorite, article.title)
                 ArticleItem(
                     data = article,
                     favoriteClick = {
-                        ToastUtils.showShort("收藏文章：${article.title}")
+                        ToastUtils.showShort(articleToast)
                     },
                     cardClick = { onArticleClick(article) }
                 )

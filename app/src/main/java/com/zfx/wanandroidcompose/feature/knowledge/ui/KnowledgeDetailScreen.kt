@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -82,7 +83,7 @@ fun KnowledgeDetailScreen(
                         },
                     painter = painterResource(R.drawable.icon_back_white),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    contentDescription = "返回按钮"
+                    contentDescription = stringResource(R.string.knowledge_detail_back_button)
                 )
                 Spacer(
                     Modifier.size(48.dp)
@@ -103,7 +104,7 @@ fun KnowledgeDetailScreen(
                             },
                     painter = painterResource(R.drawable.icon_search_white),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    contentDescription = "搜索按钮"
+                    contentDescription = stringResource(R.string.knowledge_detail_search_button)
                 )
 
                 Spacer(
@@ -116,7 +117,7 @@ fun KnowledgeDetailScreen(
                         },
                     painter = painterResource(R.drawable.icon_share_white),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    contentDescription = "分享按钮"
+                    contentDescription = stringResource(R.string.knowledge_detail_share_button)
                 )
 
                 Spacer(

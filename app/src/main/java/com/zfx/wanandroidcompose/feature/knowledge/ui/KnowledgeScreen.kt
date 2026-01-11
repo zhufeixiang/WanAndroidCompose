@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +19,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.feature.navigation.ui.NavigationScreen
 import kotlinx.coroutines.launch
@@ -32,8 +34,9 @@ fun KnowledgeScreen(
 
 
 
+    val context = LocalContext.current
     val tabData = remember {
-        listOf("体系","导航")
+        listOf(context.getString(R.string.knowledge_system), context.getString(R.string.knowledge_navigation))
     }
     Column(
         modifier = Modifier

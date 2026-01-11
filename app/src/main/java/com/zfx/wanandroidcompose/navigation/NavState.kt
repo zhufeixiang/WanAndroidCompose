@@ -5,8 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.zfx.wanandroidcompose.R
 
 /**
  * 导航状态管理
@@ -34,14 +36,14 @@ class NavState(
         get() = currentRoute in Routes.routesWithGlobalTopBar
 
     /**
-     * 当前页面标题
+     * 当前页面标题资源 ID
      */
-    val currentTitle: String
+    val currentTitleResId: Int
         get() = when (currentRoute) {
-            Routes.HOME -> "玩Android"
-            Routes.KNOWLEDGE -> "知识体系"
-            Routes.WECHAT -> "公众号"
-            else -> "玩Android"
+            Routes.HOME -> R.string.title_wan_android
+            Routes.KNOWLEDGE -> R.string.title_knowledge
+            Routes.WECHAT -> R.string.title_wechat
+            else -> R.string.title_wan_android
         }
 
     /**

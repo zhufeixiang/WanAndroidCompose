@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,7 +59,7 @@ fun <T> RefreshableLazyList(
     isLoading: Boolean = false,
     hasMore: Boolean = true,
     isRefreshing: Boolean = false,
-    emptyMessage: String = "暂无数据",
+    emptyMessage: String = "",
     showEmptyWhenLoading: Boolean = false,
     header: (@Composable () -> Unit)? = null,
     footer: (@Composable () -> Unit)? = null,
@@ -102,7 +103,7 @@ fun <T> RefreshableLazyList(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = emptyMessage,
+                text = emptyMessage.ifEmpty { stringResource(R.string.common_no_data) },
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
@@ -177,7 +178,7 @@ fun <T> RefreshableLazyList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "没有更多数据了",
+                                text = stringResource(R.string.common_no_more_data),
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.tertiary,
                                 textAlign = TextAlign.Center

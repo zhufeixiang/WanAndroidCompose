@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -88,13 +89,13 @@ fun DrawerContent(
                 ),
             painter = painterResource(R.mipmap.icon_app_logo),
             tint = MaterialTheme.colorScheme.primary,
-            contentDescription = "用户头像"
+            contentDescription = stringResource(R.string.drawer_user_avatar)
         )
 
         Spacer(Modifier.size(12.dp))
 
         Text(
-            text = userName?.takeIf { it.isNotEmpty() } ?: "请先登录",
+            text = userName?.takeIf { it.isNotEmpty() } ?: stringResource(R.string.drawer_please_login),
             color = MaterialTheme.colorScheme.surface,
             fontSize = 16.sp
         )
@@ -106,7 +107,7 @@ fun DrawerContent(
 
             },
             imageRes = R.drawable.icon_favorite,
-            name = "我的收藏"
+            name = stringResource(R.string.drawer_my_favorites)
         )
 
         Spacer(Modifier.size(2.dp))
@@ -119,7 +120,7 @@ fun DrawerContent(
                 navController.navigateToSetting()
             },
             imageRes = R.drawable.icon_setting,
-            name = "系统设置"
+            name = stringResource(R.string.drawer_system_settings)
         )
 
         Spacer(Modifier.size(2.dp))
@@ -132,7 +133,7 @@ fun DrawerContent(
                 navController.navigateToAboutUs()
             },
             imageRes = R.drawable.icon_about_us,
-            name = "关于我们"
+            name = stringResource(R.string.drawer_about_us)
         )
 
 

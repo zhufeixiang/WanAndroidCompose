@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.zfx.wanandroidcompose.R
@@ -49,7 +50,7 @@ fun BottomNavigationBar(
             },
             label = {
                 Text(
-                    "首页",
+                    stringResource(R.string.nav_home),
                     color = if (currentRoute == Routes.HOME) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
 //                    color = colorResource(
 //                        id = if (currentRoute == Routes.HOME) {
@@ -77,7 +78,7 @@ fun BottomNavigationBar(
             },
             label = {
                 Text(
-                    "广场",
+                    stringResource(R.string.nav_square),
                     color = if (currentRoute == Routes.SQUARE) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
 //                    color = colorResource(
 //                        id = if (currentRoute == Routes.SQUARE) {
@@ -105,7 +106,7 @@ fun BottomNavigationBar(
             },
             label = {
                 Text(
-                    "公众号",
+                    stringResource(R.string.nav_wechat),
                     color = if (currentRoute == Routes.WECHAT) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
 //                    color = colorResource(
 //                        id = if (currentRoute == Routes.WECHAT) {
@@ -133,7 +134,7 @@ fun BottomNavigationBar(
             },
             label = {
                 Text(
-                    "知识体系",
+                    stringResource(R.string.nav_knowledge),
                     color = if (currentRoute == Routes.KNOWLEDGE) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
 //                    color = colorResource(
 //                        id = if (currentRoute == Routes.KNOWLEDGE) {

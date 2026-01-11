@@ -18,9 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.ui.theme.AppTheme
 
 
@@ -39,7 +41,7 @@ fun ThemeSelectDialog(
         shape = RoundedCornerShape(16.dp),  // 设置圆角
         title = {
             Text(
-                text = "选择主题",
+                text = stringResource(R.string.settings_select_theme),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.primary  // 使用 primary 颜色，在白色背景上显示
             )

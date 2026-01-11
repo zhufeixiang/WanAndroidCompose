@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -134,7 +135,7 @@ fun AccountInScreen(
                     },
                 painter = painterResource(R.drawable.icon_close_grey),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                contentDescription = "关闭按钮"
+                contentDescription = stringResource(R.string.account_close_button)
             )
         }
 
@@ -145,7 +146,7 @@ fun AccountInScreen(
                 .size(64.dp),
             painter = painterResource(R.drawable.icon_avatar_default),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-            contentDescription = "默认头像"
+            contentDescription = stringResource(R.string.account_default_avatar)
         )
 
         Spacer(Modifier.size(20.dp))
@@ -154,8 +155,8 @@ fun AccountInScreen(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("用户名") },
-            placeholder = { Text("请输入用户名") },
+            label = { Text(stringResource(R.string.account_username)) },
+            placeholder = { Text(stringResource(R.string.account_username_hint)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -166,8 +167,8 @@ fun AccountInScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("密码") },
-            placeholder = { Text("请输入密码") },
+            label = { Text(stringResource(R.string.account_password)) },
+            placeholder = { Text(stringResource(R.string.account_password_hint)) },
             visualTransformation = if (passwordVisible) {
                 VisualTransformation.None
             } else {
@@ -180,7 +181,7 @@ fun AccountInScreen(
                     Icon(
                         imageVector = if (passwordVisible) Icons.Default.Visibility
                         else Icons.Default.VisibilityOff,
-                        contentDescription = if (passwordVisible) "隐藏密码" else "显示密码"
+                        contentDescription = if (passwordVisible) stringResource(R.string.account_hide_password) else stringResource(R.string.account_show_password)
                     )
                 }
             },
@@ -193,6 +194,8 @@ fun AccountInScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val userToast = stringResource(R.string.account_username_empty)
+            val pwdToast = stringResource(R.string.account_password_empty)
             Button(
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -203,17 +206,17 @@ fun AccountInScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                     if (username.isEmpty()){
-                        ToastUtils.showShort("请输入用户名！")
+                        ToastUtils.showShort(userToast)
                         return@Button
                     }
                     if (password.isEmpty()){
-                        ToastUtils.showShort("请输入密码！")
+                        ToastUtils.showShort(pwdToast)
                         return@Button
                     }
                     viewModel.register(AccountBody(username = username, password = password, repassword = password))
                 }
             ) {
-                Text("注册")
+                Text(stringResource(R.string.account_register))
             }
 
             Spacer(Modifier.size(20.dp))
@@ -228,17 +231,17 @@ fun AccountInScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                     if (username.isEmpty()){
-                        ToastUtils.showShort("请输入用户名！")
+                        ToastUtils.showShort(userToast)
                         return@Button
                     }
                     if (password.isEmpty()){
-                        ToastUtils.showShort("请输入密码！")
+                        ToastUtils.showShort(pwdToast)
                         return@Button
                     }
                     viewModel.signIn(AccountBody(username = username, password = password))
                 }
             ) {
-                Text("登录")
+                Text(stringResource(R.string.account_login))
             }
         }
 

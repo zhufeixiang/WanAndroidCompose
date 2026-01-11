@@ -32,6 +32,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,7 @@ fun KnowledgeList(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "暂无数据",
+                text = stringResource(R.string.common_no_data),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
@@ -155,7 +156,7 @@ fun KnowledgeItem(
                     .align(Alignment.CenterVertically),
                 painter = painterResource(id = R.drawable.icon_arrow_right_gray),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onTertiary),
-                contentDescription = "向右箭头"
+                contentDescription = stringResource(R.string.knowledge_arrow_right)
             )
         }
     }

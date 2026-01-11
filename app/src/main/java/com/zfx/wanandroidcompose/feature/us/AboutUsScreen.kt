@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -43,7 +44,7 @@ fun AboutUsScreen(
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text("关于我们", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
+                    Text(stringResource(R.string.about_us_title), color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
                 },
                 navigationIcon = {
                     IconButton(
@@ -54,7 +55,7 @@ fun AboutUsScreen(
                         Icon(
                             Icons.Default.ArrowBack,
                             tint = MaterialTheme.colorScheme.onPrimary,
-                            contentDescription = "返回"
+                            contentDescription = stringResource(R.string.common_back)
                         )
                     }
                 },
@@ -90,27 +91,7 @@ fun AboutUsScreen(
                 Spacer(Modifier.size(20.dp))
 
                 Text(
-                    text = "# Compose 可折叠 Toolbar 使用指南\n" +
-                            "\n" +
-                            "## 概述\n" +
-                            "\n" +
-                            "本指南对比 View 系统中的 `CoordinatorLayout` + `AppBarLayout` + `CollapsingToolbarLayout` 组合与 Compose 中的对应实现方式。\n" +
-                            "\n" +
-                            "---\n" +
-                            "\n" +
-                            "## View 系统 vs Compose 组件对比\n" +
-                            "\n" +
-                            "| View 系统 | Compose | 功能说明 |\n" +
-                            "|-----------|---------|---------|\n" +
-                            "| `CoordinatorLayout` | `Modifier.nestedScroll()` | 嵌套滚动行为协调器 |\n" +
-                            "| `AppBarLayout` | `TopAppBar` | 标准 Toolbar |\n" +
-                            "| `CollapsingToolbarLayout` | `LargeTopAppBar` / `MediumTopAppBar` | 可折叠 Toolbar |\n" +
-                            "\n" +
-                            "---\n" +
-                            "\n" +
-                            "## View 系统实现方式\n" +
-                            "\n" +
-                            "### 1. CoordinatorLayout + AppBarLayout + CollapsingToolbarLayout",
+                    text = stringResource(R.string.about_us_guide_title),
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp
                 )
@@ -120,7 +101,7 @@ fun AboutUsScreen(
                 Spacer(Modifier.size(20.dp))
 
                 Text(
-                    text = "开源代码地址https://github.com/zhufeixiang/WanAndroidCompose",
+                    text = stringResource(R.string.about_us_github),
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp
                 )

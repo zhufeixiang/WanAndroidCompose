@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,7 +76,7 @@ fun ArticleItem(
                                 shape = RoundedCornerShape(4.dp)  // 圆角（与背景一致）
                             )
                             .padding(horizontal = 6.dp, vertical = 2.dp),  // 内边距,
-                        text = "置顶",
+                        text = stringResource(R.string.article_pinned),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.error
@@ -84,7 +85,7 @@ fun ArticleItem(
                     Image(
                         painter = painterResource(id = R.drawable.icon_article_logo),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                        contentDescription = "文章图标",
+                        contentDescription = stringResource(R.string.article_icon),
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -94,9 +95,9 @@ fun ArticleItem(
                         .padding(start = 8.dp)
                         .align(Alignment.CenterVertically),
                     text = if (data.author.isNotEmpty()){
-                        "作者:${data.author}"
+                        stringResource(R.string.article_author, data.author)
                     }else{
-                        "分享人:${data.shareUser}"
+                        stringResource(R.string.article_share_user, data.shareUser)
                     },
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.surface
@@ -157,7 +158,7 @@ fun ArticleItem(
                     }else{
                         R.drawable.icon_heart_grey
                     }),
-                    contentDescription = "收藏图标"
+                    contentDescription = stringResource(R.string.article_favorite_icon)
                 )
             }
 

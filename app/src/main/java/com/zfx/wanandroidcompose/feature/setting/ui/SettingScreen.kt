@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -71,7 +72,7 @@ fun SettingScreen(
                                    },
                     painter = painterResource(R.drawable.icon_back_white),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    contentDescription = "返回按钮"
+                    contentDescription = stringResource(R.string.settings_back_button)
                 )
 
                 Spacer(
@@ -79,7 +80,7 @@ fun SettingScreen(
                 )
 
                 Text(
-                    text = "设置",
+                    text = stringResource(R.string.title_settings),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -97,7 +98,7 @@ fun SettingScreen(
         ) {
 
             SettingItem(
-                name = "主题设置",
+                name = stringResource(R.string.settings_theme),
                 setName = theme.themeName,
                 onItemClick = {
                     showThemeDialog = true  // 显示对话框
@@ -119,8 +120,8 @@ fun SettingScreen(
 
 
             SettingItem(
-                name = "语言设置",
-                setName = "跟随系统",
+                name = stringResource(R.string.settings_language),
+                setName = stringResource(R.string.settings_follow_system),
                 onItemClick = {
 
                 }
@@ -160,7 +161,7 @@ fun SettingItem(
 
         Text(
             text = setName,
-            color = if (name == "主题设置") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary,
+            color = if (name == stringResource(R.string.settings_theme)) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary,
             fontSize = 16.sp
         )
 
@@ -169,7 +170,7 @@ fun SettingItem(
         Image(
             painter = painterResource(R.drawable.icon_arrow_right_gray),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            contentDescription = "向右箭头"
+            contentDescription = stringResource(R.string.settings_arrow_right)
         )
 
     }

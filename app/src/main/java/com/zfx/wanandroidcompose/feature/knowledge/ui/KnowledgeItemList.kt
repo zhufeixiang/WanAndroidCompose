@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -104,7 +105,7 @@ fun KnowledgeItemList(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "暂无数据",
+                text = stringResource(R.string.common_no_data),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
@@ -169,7 +170,7 @@ fun KnowledgeItemList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "没有更多数据了",
+                                text = stringResource(R.string.common_no_more_data),
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 textAlign = TextAlign.Center

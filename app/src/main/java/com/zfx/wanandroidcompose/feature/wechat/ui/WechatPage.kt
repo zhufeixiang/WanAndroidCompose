@@ -8,8 +8,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.blankj.utilcode.util.ToastUtils
+import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.feature.home.ui.ArticleItem
 import com.zfx.wanandroidcompose.feature.wechat.WechatViewModel
 import com.zfx.wanandroidcompose.navigation.Routes
@@ -83,10 +85,11 @@ fun WechatPage(
         onLoadMore = { viewModel.loadMore() },
         onRefresh = { viewModel.refresh() }
     ) { article ->
+        val articleToast = stringResource(R.string.article_favorite, article.title)
         ArticleItem(
             data = article,
             favoriteClick = {
-                ToastUtils.showShort("收藏文章：${article.title}")
+                ToastUtils.showShort(articleToast)
             },
             cardClick = {
                 navController.navigateToLink(article.title, article.link)

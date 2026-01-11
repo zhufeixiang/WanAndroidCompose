@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blankj.utilcode.util.ToastUtils
@@ -144,7 +145,7 @@ class MainActivity : ComponentActivity(){
                     // 只在需要显示全局 TopBar 的路由中显示
                     if (navState.showGlobalTopBar) {
                         ScrollableTopBar(
-                            title = navState.currentTitle,
+                            title = stringResource(navState.currentTitleResId),
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
                             onSearchClick = {

@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blankj.utilcode.util.ToastUtils
@@ -33,9 +34,15 @@ import kotlinx.coroutines.launch
 fun TopBarContent(
     title: String,
     drawerState: androidx.compose.material3.DrawerState,
-    onSearchClick: () -> Unit = { ToastUtils.showShort("点击了搜索") }
+    onSearchClick: (() -> Unit)? = null
 ) {
     val scope = rememberCoroutineScope()
+    // 在 @Composable 函数体内获取字符串资源
+    val searchClickMessage = stringResource(R.string.topbar_click_search)
+    
+    val actualOnSearchClick = onSearchClick ?: {
+        ToastUtils.showShort(searchClickMessage)
+    }
     
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -50,7 +57,7 @@ fun TopBarContent(
         ) {
             Image(
                 painter = painterResource(R.drawable.icon_menu_white),
-                contentDescription = "目录",
+                contentDescription = stringResource(R.string.topbar_menu),
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -63,10 +70,10 @@ fun TopBarContent(
 
         Spacer(Modifier.weight(1f))
 
-        IconButton(onClick = onSearchClick) {
+        IconButton(onClick = actualOnSearchClick) {
             Image(
                 painter = painterResource(R.drawable.icon_search_white),
-                contentDescription = "搜索",
+                contentDescription = stringResource(R.string.topbar_search),
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -82,9 +89,15 @@ fun ScrollableTopBar(
     title: String,
     drawerState: androidx.compose.material3.DrawerState,
     scrollBehavior: TopAppBarScrollBehavior,
-    onSearchClick: () -> Unit = { ToastUtils.showShort("点击了搜索") }
+    onSearchClick: (() -> Unit)? = null
 ) {
     val scope = rememberCoroutineScope()
+    // 在 @Composable 函数体内获取字符串资源
+    val searchClickMessage = stringResource(R.string.topbar_click_search)
+    
+    val actualOnSearchClick = onSearchClick ?: {
+        ToastUtils.showShort(searchClickMessage)
+    }
     
     TopAppBar(
         title = {
@@ -104,16 +117,16 @@ fun ScrollableTopBar(
             ) {
                 Image(
                     painter = painterResource(R.drawable.icon_menu_white),
-                    contentDescription = "目录",
+                    contentDescription = stringResource(R.string.topbar_menu),
                     modifier = Modifier.size(24.dp)
                 )
             }
         },
         actions = {
-            IconButton(onClick = onSearchClick) {
+            IconButton(onClick = actualOnSearchClick) {
                 Image(
                     painter = painterResource(R.drawable.icon_search_white),
-                    contentDescription = "搜索",
+                    contentDescription = stringResource(R.string.topbar_search),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -140,10 +153,10 @@ fun TopBar(
     val scope = rememberCoroutineScope()
     
     val title = when (currentRoute) {
-        com.zfx.wanandroidcompose.navigation.Routes.HOME -> "玩Android"
-        com.zfx.wanandroidcompose.navigation.Routes.KNOWLEDGE -> "知识体系"
-        com.zfx.wanandroidcompose.navigation.Routes.WECHAT -> "公众号"
-        else -> "玩Android"
+        com.zfx.wanandroidcompose.navigation.Routes.HOME -> stringResource(R.string.title_wan_android)
+        com.zfx.wanandroidcompose.navigation.Routes.KNOWLEDGE -> stringResource(R.string.title_knowledge)
+        com.zfx.wanandroidcompose.navigation.Routes.WECHAT -> stringResource(R.string.title_wechat)
+        else -> stringResource(R.string.title_wan_android)
     }
     
     TopBarContent(
