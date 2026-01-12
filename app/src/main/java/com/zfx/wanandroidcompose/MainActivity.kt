@@ -54,30 +54,47 @@ import com.zfx.wanandroidcompose.navigation.setupNavigation
 import com.zfx.wanandroidcompose.navigation.rememberNavState
 import com.zfx.wanandroidcompose.ui.components.BottomNavigationBar
 import com.zfx.wanandroidcompose.ui.components.DrawerContent
+import com.zfx.wanandroidcompose.ui.components.LanguageProvider
 import com.zfx.wanandroidcompose.ui.components.ScrollableTopBar
 import com.zfx.wanandroidcompose.ui.theme.AppTheme
 import com.zfx.wanandroidcompose.ui.theme.WanAndroidComposeTheme
 import com.zfx.wanandroidcompose.util.NavControllerManager
 
 class MainActivity : ComponentActivity(){
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // 检查是否需要应用保存的语言（第一次启动时）
+        checkAndApplyLanguage()
+        
         setContent {
             MainScreen()
         }
+    }
+    
+    private fun checkAndApplyLanguage() {
+        // 在 Activity 创建后，检查保存的语言并应用
+        // 如果语言和当前不一致，会在 LanguageProvider 中处理
+        // 这里主要是确保 Configuration 已更新
     }
 
     @Composable
     private fun MainScreen() {
         val context = LocalContext.current
+
         val settingViewModel: SettingViewModel = viewModel(
             factory = SettingViewModelFactory(context)
         )
+        val currentLanguage by settingViewModel.curLanguage.collectAsState()
+
         val theme by settingViewModel.curTheme.collectAsState()
-        WanAndroidComposeTheme(
-            theme = theme
-        ){
-            AppPortrait(settingViewModel = settingViewModel)
+        LanguageProvider(language = currentLanguage) {
+            WanAndroidComposeTheme(
+                theme = theme
+            ){
+                AppPortrait(settingViewModel = settingViewModel)
+            }
         }
     }
 

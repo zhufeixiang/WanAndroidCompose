@@ -1,5 +1,6 @@
 package com.zfx.wanandroidcompose.ui.theme
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -10,19 +11,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
+import com.zfx.wanandroidcompose.R
 
-
-
-enum class AppTheme(val themeName : String,val color : Color) {
-    DARK("深色主题",ColorDark), //深色主题
-    LIGHT("浅色主题",ColorLight),//浅色主题
-    AUTO("跟随系统",Pink40),//跟随系统
-    BLUE("蓝色主题",ColorBlue),//蓝色主题
-    RED("红色主题",ColorRed),//红色主题
-    YELLOW("黄色主题",ColorYellow),//黄色主题
-    GREEN("绿色主题",ColorGreen),//绿色主题
-    ORANGE("橘色主题",ColorOrange); //橘色主题
+enum class AppTheme(
+    @StringRes val themeNameRes: Int,  // 使用资源 ID 而不是字符串
+    val color: Color
+) {
+    DARK(R.string.theme_dark, ColorDark),
+    LIGHT(R.string.theme_light, ColorLight),
+    AUTO(R.string.theme_auto, Pink40),
+    BLUE(R.string.theme_blue, ColorBlue),
+    RED(R.string.theme_red, ColorRed),
+    YELLOW(R.string.theme_yellow, ColorYellow),
+    GREEN(R.string.theme_green, ColorGreen),
+    ORANGE(R.string.theme_orange, ColorOrange);
     
     companion object {
         /**
@@ -32,6 +36,15 @@ enum class AppTheme(val themeName : String,val color : Color) {
             return enumValues<AppTheme>().toList()
         }
     }
+}
+
+/**
+ * 获取主题的本地化显示名称
+ * 在 Composable 中使用此扩展函数来获取本地化的字符串
+ */
+@Composable
+fun AppTheme.themeName(): String {
+    return stringResource(themeNameRes)
 }
 
 private val DarkColorScheme = darkColorScheme(

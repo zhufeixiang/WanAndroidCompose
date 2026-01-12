@@ -33,7 +33,14 @@
     <string name="settings_select_theme">选择主题</string>
     <string name="settings_back_button">返回按钮</string>
     <string name="settings_arrow_right">向右箭头</string>
-    
+    <string name="settings_select_language">选择语言</string>
+    <string name="settings_language_zh">中文</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_ja">日本語</string>
+    <string name="settings_language_ko">한국어</string>
+    <string name="settings_language_follow_system">跟随系统</string>
+    <string name="settings_language_image_des">是否选中</string>
+
     <!-- 主题名称 -->
     <string name="theme_dark">深色主题</string>
     <string name="theme_light">浅色主题</string>

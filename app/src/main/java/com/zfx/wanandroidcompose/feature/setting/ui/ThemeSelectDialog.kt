@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.ui.theme.AppTheme
+import com.zfx.wanandroidcompose.ui.theme.themeName
 
 
 @Composable
@@ -62,7 +62,7 @@ fun ThemeSelectDialog(
                     ){
                         Text(
                             modifier = Modifier.weight(1f),
-                            text = allThemes[index].themeName,
+                            text = allThemes[index].themeName(),  // 使用扩展函数获取本地化字符串
                             color = MaterialTheme.colorScheme.surface,  // 使用 primary 颜色，在白色背景上显示
                             fontSize = 14.sp
                         )

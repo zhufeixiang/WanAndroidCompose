@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,10 +30,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.activity.ComponentActivity
 import androidx.navigation.NavController
 import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.feature.setting.SettingViewModel
+import com.zfx.wanandroidcompose.feature.setting.displayName
 import com.zfx.wanandroidcompose.feature.setting.settingViewModel
+import com.zfx.wanandroidcompose.ui.theme.themeName
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -42,11 +49,21 @@ fun SettingScreen(
 ){
     // 如果传入了 viewModel，使用传入的；否则创建新的
     val settingViewModel = viewModel ?: settingViewModel()
+    
+    val context = LocalContext.current
+    val activity = context as? ComponentActivity
+    val coroutineScope = rememberCoroutineScope()
 
     val theme by settingViewModel.curTheme.collectAsState()
     
     // 控制主题选择对话框的显示
     var showThemeDialog by remember { mutableStateOf(false) }
+
+
+    // 控制语言选择对话框的显示
+    var showLanguageDialog by remember { mutableStateOf(false) }
+
+    val language by settingViewModel.curLanguage.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -99,7 +116,7 @@ fun SettingScreen(
 
             SettingItem(
                 name = stringResource(R.string.settings_theme),
-                setName = theme.themeName,
+                setName = theme.themeName(),  // 使用扩展函数获取本地化字符串
                 onItemClick = {
                     showThemeDialog = true  // 显示对话框
                 }
@@ -121,11 +138,32 @@ fun SettingScreen(
 
             SettingItem(
                 name = stringResource(R.string.settings_language),
-                setName = stringResource(R.string.settings_follow_system),
+                setName = language.displayName(),  // 使用扩展函数获取本地化字符串
                 onItemClick = {
-
+                    showLanguageDialog = true
                 }
             )
+
+            if (showLanguageDialog){
+                LanguageSelectDialog(
+                    onDismiss = {
+                        showLanguageDialog = false
+                    },
+                    onLanguageSelect = { selectLanguage ->
+                        // 关闭对话框
+                        showLanguageDialog = false
+                        // 保存语言并等待保存完成后再重启
+                        coroutineScope.launch {
+                            settingViewModel.saveLanguage(selectLanguage)
+                            // 等待一小段时间确保 DataStore 保存完成
+                            delay(200)
+                            // 重启应用
+                            activity?.recreate()
+                        }
+                    },
+                    currentLanguage = language
+                )
+            }
 
         }
 

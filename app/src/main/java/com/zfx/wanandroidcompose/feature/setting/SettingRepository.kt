@@ -17,7 +17,7 @@ val Context.settingDataStore : DataStore<Preferences> by preferencesDataStore(na
 
 object SettingPreferencesKeys{
     val THEME = stringPreferencesKey("theme")
-    val LANGUGAE = stringPreferencesKey("language")
+    val LANGUAGE = stringPreferencesKey("language")
 }
 
 
@@ -26,9 +26,18 @@ class SettingRepository(context: Context) {
 
     private val dataStore = context.settingDataStore
 
-    val themeFlow : Flow<String?> = dataStore.data
+    val themeFlow : Flow<AppTheme> = dataStore.data
         .map { preferences ->
-            preferences[SettingPreferencesKeys.THEME]
+            val themeName  = preferences[SettingPreferencesKeys.THEME]
+            if (themeName == null) {
+                AppTheme.AUTO
+            } else {
+                try {
+                    AppTheme.valueOf(themeName)
+                } catch (e: IllegalArgumentException) {
+                    AppTheme.AUTO
+                }
+            }
         }
 
 
@@ -40,19 +49,35 @@ class SettingRepository(context: Context) {
         }
     }
 
-    suspend fun getTheme() : AppTheme{
-        return dataStore.data.first().let { preferences ->
-            val themeName = preferences[SettingPreferencesKeys.THEME]
-            if (themeName == null) {
-                AppTheme.AUTO  // 如果没有保存的主题，返回默认值
+
+    val languageFlow : Flow<AppLanguage> = dataStore.data
+        .map { preferences ->
+            val languageCode = preferences[SettingPreferencesKeys.LANGUAGE]
+            val language = if (languageCode == null || languageCode.isEmpty()) {
+                AppLanguage.FLOW_SYSTEM
             } else {
-                try {
-                    AppTheme.valueOf(themeName)  // 将字符串转换为枚举
-                } catch (e: IllegalArgumentException) {
-                    AppTheme.AUTO  // 如果值不存在（比如枚举值被删除），返回默认值
-                }
+                AppLanguage.fromLocalCode(languageCode)
+            }
+            language
+        }
+
+
+    suspend fun saveLanguage(language : AppLanguage){
+        // 保存到 DataStore
+        dataStore.edit { preferences ->
+            if (language == AppLanguage.FLOW_SYSTEM) {
+                // 如果是跟随系统，删除 key
+                preferences.remove(SettingPreferencesKeys.LANGUAGE)
+            } else {
+                // 保存语言代码（如 "zh", "en"）
+                val languageCode = language.locale.language
+                preferences[SettingPreferencesKeys.LANGUAGE] = languageCode
             }
         }
+        
+        // 确保保存完成，并验证保存的值
+        val savedPreferences = dataStore.data.first()
+        val savedLanguageCode = savedPreferences[SettingPreferencesKeys.LANGUAGE]
     }
 
 
