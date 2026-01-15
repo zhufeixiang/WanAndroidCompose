@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zfx.wanandroidcompose.R
@@ -62,26 +64,26 @@ fun ArticleItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-                if (data.type == 1){
+                // 置顶标签或图标
+                if (data.type == 1) {
                     Text(
                         modifier = Modifier
                             .background(
-                                color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),  // 背景色（主题色，10% 透明度）
-                                shape = RoundedCornerShape(4.dp)  // 圆角
+                                color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(4.dp)
                             )
                             .border(
-                                width = 1.dp,  // 边框宽度
-                                color = MaterialTheme.colorScheme.error,  // 边框颜色
-                                shape = RoundedCornerShape(4.dp)  // 圆角（与背景一致）
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.error,
+                                shape = RoundedCornerShape(4.dp)
                             )
-                            .padding(horizontal = 6.dp, vertical = 2.dp),  // 内边距,
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
                         text = stringResource(R.string.article_pinned),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.error
                     )
-                }else{
+                } else {
                     Image(
                         painter = painterResource(id = R.drawable.icon_article_logo),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
@@ -90,23 +92,25 @@ fun ArticleItem(
                     )
                 }
 
+                // 作者信息（单行省略）
                 Text(
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .align(Alignment.CenterVertically),
-                    text = if (data.author.isNotEmpty()){
+                        .weight(1f), // 使用 weight 占据剩余空间，配合 maxLines 实现省略
+                    text = if (data.author.isNotEmpty()) {
                         stringResource(R.string.article_author, data.author)
-                    }else{
+                    } else {
                         stringResource(R.string.article_share_user, data.shareUser)
                     },
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.surface
+                    color = MaterialTheme.colorScheme.surface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+
+                // 时间信息
                 Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
+                    modifier = Modifier.padding(start = 8.dp),
                     text = data.niceDate,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onTertiary
@@ -117,21 +121,16 @@ fun ArticleItem(
                 modifier = Modifier.height(8.dp)
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-            ) {
-
-
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = data.title,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.surface
-                )
-            }
+            // 标题（多行省略）
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = data.title,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.surface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
 
 
 
