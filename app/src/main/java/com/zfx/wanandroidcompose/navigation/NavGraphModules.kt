@@ -9,6 +9,7 @@ import com.zfx.wanandroidcompose.feature.home.ui.HomeScreen
 import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeDetailScreen
 import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeScreen
 import com.zfx.wanandroidcompose.feature.link.LinkScreen
+import com.zfx.wanandroidcompose.feature.program.ui.ProgramScreen
 import com.zfx.wanandroidcompose.feature.search.ui.SearchScreen
 import com.zfx.wanandroidcompose.feature.setting.ui.SettingScreen
 import com.zfx.wanandroidcompose.feature.square.ui.SquareScreen
@@ -65,6 +66,15 @@ fun NavGraphBuilder.setupMainNavigation(config: NavConfig) {
     // Wechat
     composableWithSlideAnimation(route = Routes.WECHAT) {
         WechatScreen(
+            navController = config.navController,
+            onToggleBars = config.onToggleBars,
+            nestedScrollConnection = config.nestedScrollConnection
+        )
+    }
+
+    // Program
+    composableWithSlideAnimation(route = Routes.PROGRAM) {
+        ProgramScreen(
             navController = config.navController,
             onToggleBars = config.onToggleBars,
             nestedScrollConnection = config.nestedScrollConnection

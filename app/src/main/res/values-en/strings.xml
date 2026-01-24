@@ -6,6 +6,7 @@
     <string name="nav_square">Square</string>
     <string name="nav_wechat">WeChat</string>
     <string name="nav_knowledge">Knowledge</string>
+    <string name="nav_program">项目</string>
     
     <!-- Page Titles -->
     <string name="title_wan_android">WanAndroid</string>

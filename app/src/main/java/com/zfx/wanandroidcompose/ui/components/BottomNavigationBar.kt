@@ -20,6 +20,7 @@ import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.navigation.Routes
 import com.zfx.wanandroidcompose.navigation.navigateToHome
 import com.zfx.wanandroidcompose.navigation.navigateToKnowledge
+import com.zfx.wanandroidcompose.navigation.navigateToProgram
 import com.zfx.wanandroidcompose.navigation.navigateToSquare
 import com.zfx.wanandroidcompose.navigation.navigateToWechat
 
@@ -143,6 +144,27 @@ fun BottomNavigationBar(
 //                            R.color.nav_unselected
 //                        }
 //                    )
+                )
+            },
+            colors = navigationBarItemColors()
+        )
+
+        //项目
+        NavigationBarItem(
+            selected = currentRoute == Routes.PROGRAM,
+            onClick = {
+                navController.navigateToProgram()
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_menu_program),
+                    contentDescription = null
+                )
+            },
+            label = {
+                Text(
+                    stringResource(R.string.nav_program),
+                    color = if (currentRoute == Routes.PROGRAM) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
                 )
             },
             colors = navigationBarItemColors()

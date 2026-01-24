@@ -6,6 +6,7 @@
     <string name="nav_square">광장</string>
     <string name="nav_wechat">공식 계정</string>
     <string name="nav_knowledge">지식 체계</string>
+    <string name="nav_program">项目</string>
     
     <!-- 页面标题 -->
     <string name="title_wan_android">WanAndroid</string>

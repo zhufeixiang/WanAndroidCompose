@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets
 object Routes {
     const val HOME = "home"
     const val KNOWLEDGE = "knowledge"
+    const val PROGRAM = "program"
 
     const val KNOWLEDGE_DETAIL = "knowledge_detail"
     const val LINK = "link/{title}/{linkUrl}"
@@ -48,10 +49,10 @@ object Routes {
     const val SETTING = "setting"
 
     // 需要显示底部导航栏的路由
-    val routesWithBottomBar = setOf(HOME, KNOWLEDGE,WECHAT,SQUARE)
+    val routesWithBottomBar = setOf(HOME, KNOWLEDGE,WECHAT,SQUARE,PROGRAM)
     
     // 需要显示全局 TopBar 的路由（这些页面使用全局 TopBar，其他页面自己管理 TopBar）
-    val routesWithGlobalTopBar = setOf(HOME, KNOWLEDGE, WECHAT,SQUARE)
+    val routesWithGlobalTopBar = setOf(HOME, KNOWLEDGE, WECHAT,SQUARE,PROGRAM)
     
     /**
      * 构建带参数的 Link 路由

@@ -32,6 +32,16 @@ fun NavController.navigateToKnowledge() {
 }
 
 /**
+ * 导航到项目
+ */
+fun NavController.navigateToProgram() {
+    navigate(Routes.PROGRAM) {
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+/**
  * 导航到公众号
  */
 fun NavController.navigateToWechat() {
