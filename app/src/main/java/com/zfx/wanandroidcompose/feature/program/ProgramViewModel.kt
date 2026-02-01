@@ -23,7 +23,21 @@ class ProgramViewModel : BaseViewModel() {
     private val _programTree = MutableStateFlow<List<WeChatAccount>>(emptyList())
     val programTree : StateFlow<List<WeChatAccount>> = _programTree.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow<Boolean>(false)
+    val isRefreshing : StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
+    private val _isLoadingMore = MutableStateFlow<Boolean>(false)
+    val isLoadingMore : StateFlow<Boolean> = _isLoadingMore.asStateFlow()
+
+    private val _hasMore = MutableStateFlow<Boolean>(false)
+    val hasMore : StateFlow<Boolean> = _hasMore.asStateFlow()
+
+    private val _programList = MutableStateFlow<List<Article>>(emptyList())
+    val programList : StateFlow<List<Article>> = _programList.asStateFlow()
+
+    private var curPage = 0
+
+    var cid = 0
 
     init {
         getProgramTree()
@@ -43,5 +57,46 @@ class ProgramViewModel : BaseViewModel() {
         }
     }
 
+    private fun getProgramTreeByCid(){
+        viewModelScope.launch {
+            collectResult(
+                flow = repository.getProgramListsById(curPage,cid),
+                onError = { error ->
+                    ToastUtils.showShort(error.message)
+                },
+                onSuccess = { pageTree ->
+                    if (_isRefreshing.value){
+                        _programList.value = pageTree.datas
+                    }else{
+                        if (_isLoadingMore.value){
+                            _programList.value += pageTree.datas
+                        }
+                    }
+
+                    _isRefreshing.value = false
+                    _isLoadingMore.value = false
+                    _hasMore.value = pageTree.hasMore()
+                }
+            )
+        }
+    }
+
+    fun setCid(id : Int){
+        this.cid = id
+    }
+
+    fun refresh(){
+        curPage = 0
+        _isRefreshing.value = true
+        _isLoadingMore.value = false
+        getProgramTreeByCid()
+    }
+
+    fun loadMore(){
+        curPage++
+        _isRefreshing.value = false
+        _isLoadingMore.value = true
+        getProgramTreeByCid()
+    }
 
 }
