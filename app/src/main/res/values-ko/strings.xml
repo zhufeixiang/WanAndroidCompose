@@ -18,6 +18,11 @@
     <!-- 抽屉菜单 -->
     <string name="drawer_user_avatar">사용자 아바타</string>
     <string name="drawer_please_login">먼저 로그인하세요</string>
+    <string name="drawer_level_placeholder">레벨: %1$s</string>
+    <string name="drawer_rank_placeholder">순위: %1$s</string>
+    <string name="drawer_coin_placeholder">포인트：%1$s</string>
+    <string name="drawer_coin_rank_desc">포인트 순위</string>
+    <string name="drawer_my_coin">내 포인트</string>
     <string name="drawer_my_favorites">내 즐겨찾기</string>
     <string name="drawer_system_settings">시스템 설정</string>
     <string name="drawer_about_us">회사 소개</string>
@@ -122,4 +127,8 @@
     <string name="knowledge_detail_back_button">뒤로 가기 버튼</string>
     <string name="knowledge_detail_search_button">검색 버튼</string>
     <string name="knowledge_detail_share_button">공유 버튼</string>
+
+    <!-- 积分列表 -->
+    <string name="coin_title">포인트 목록</string>
+    <string name="coin_rank_title">포인트 순위</string>
 </resources>

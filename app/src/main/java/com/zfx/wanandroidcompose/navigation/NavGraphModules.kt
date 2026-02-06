@@ -5,6 +5,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.zfx.wanandroidcompose.feature.account.ui.AccountInScreen
+import com.zfx.wanandroidcompose.feature.coin.ui.CoinListScreen
+import com.zfx.wanandroidcompose.feature.coin.ui.CoinScreen
 import com.zfx.wanandroidcompose.feature.home.ui.HomeScreen
 import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeDetailScreen
 import com.zfx.wanandroidcompose.feature.knowledge.ui.KnowledgeScreen
@@ -162,6 +164,22 @@ fun NavGraphBuilder.setupOtherNavigation(config: NavConfig) {
         SettingScreen(
             navController = config.navController,
             viewModel = config.settingViewModel
+        )
+    }
+
+    // Coin
+    composableWithSlideAnimation(route = Routes.COIN_RANK) {
+        CoinScreen(
+            navController = config.navController
+        )
+    }
+
+    // CoinDetaiL
+    composableWithSlideAnimation(route = Routes.COIN_DETAIL) { backStackEntry ->
+        val coinCount = backStackEntry.arguments?.getString("coinCount") ?: ""
+        CoinListScreen(
+            coinCount = coinCount,
+            navController = config.navController
         )
     }
 }

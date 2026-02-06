@@ -5,6 +5,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.DismissibleDrawerSheet
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -80,6 +82,7 @@ fun PortraitScreen(
         drawerState = drawerState,
         drawerContent = {
             DismissibleDrawerSheet(
+                modifier = Modifier.width(200.dp),
                 drawerState = drawerState
             ) {
                 DrawerContent(

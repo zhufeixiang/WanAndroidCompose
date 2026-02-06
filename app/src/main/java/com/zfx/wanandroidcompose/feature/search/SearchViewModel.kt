@@ -5,6 +5,8 @@ import com.zfx.wanandroidcompose.data.Article
 import com.zfx.wanandroidcompose.feature.home.HomeRepository
 import com.zfx.commonlib.base.viewmodel.BaseViewModel
 import com.zfx.commonlib.ext.collectResult
+import com.zfx.commonlib.util.StringResourceHelper
+import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.data.HotKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -68,7 +70,7 @@ class SearchViewModel(
                     _isLoading.value = false
                 },
                 onError = { error ->
-                    val errorMsg = error.message ?: "搜索失败"
+                    val errorMsg = error.message ?: StringResourceHelper.getString(R.string.search_failed)
                     _isLoading.value = false
                     // 可以显示错误提示
                 }

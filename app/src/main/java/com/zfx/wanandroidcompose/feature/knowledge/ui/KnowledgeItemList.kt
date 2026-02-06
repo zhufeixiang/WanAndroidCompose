@@ -213,7 +213,7 @@ fun KnowledgeItemListItem(
                 Image(
                     painter = painterResource(id = R.drawable.icon_article_logo),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                    contentDescription = "文章图标",
+                    contentDescription = stringResource(R.string.article_icon),
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(

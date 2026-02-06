@@ -3,15 +3,16 @@ package com.zfx.wanandroidcompose.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
@@ -25,18 +26,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import com.zfx.wanandroidcompose.R
+import com.zfx.wanandroidcompose.feature.coin.data.CoinData
+import com.zfx.wanandroidcompose.feature.coin.data.PersonalCoinData
 import com.zfx.wanandroidcompose.navigation.Routes
 import com.zfx.wanandroidcompose.navigation.navigateToAccount
 import com.zfx.wanandroidcompose.navigation.navigateToAboutUs
+import com.zfx.wanandroidcompose.navigation.navigateToCoinDetail
+import com.zfx.wanandroidcompose.navigation.navigateToCoinRank
 import com.zfx.wanandroidcompose.navigation.navigateToSetting
 import com.zfx.wanandroidcompose.util.UserPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -51,60 +55,133 @@ fun DrawerContent(
     drawerState: androidx.compose.material3.DrawerState,
     modifier: Modifier = Modifier
 ) {
-    // 使用 remember + mutableStateOf 来保存用户名状态
+    // 使用 remember + mutableStateOf 来保存用户名和积分状态
     var userName by remember { mutableStateOf(UserPreferences.getUsername()) }
+    var userCoin by remember {
+        mutableStateOf(parsePersonalCoinData(UserPreferences.getPersonalCoin()))
+    }
+    var isLoggedIn by remember { mutableStateOf(UserPreferences.isLoggedIn()) }
 
-    // 当 Drawer 打开时，重新读取用户名（这样可以响应登录后的变化）
+
+    // 当 Drawer 打开时，重新读取用户名和积分（这样可以响应登录后的变化）
     LaunchedEffect(drawerState.isOpen) {
         if (drawerState.isOpen) {
             userName = UserPreferences.getUsername()
+            userCoin = parsePersonalCoinData(UserPreferences.getPersonalCoin())
         }
     }
 
     val scope = rememberCoroutineScope()
     Column(
         modifier = modifier
-            .width(260.dp)
+            .fillMaxWidth()
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.size(28.dp))
 
-        Icon(
+        Box(
             modifier = Modifier
-                .size(64.dp)
-                .then(
-                    // 只有在未登录时才可点击
-                    if (userName.isNullOrEmpty()) {
-                        Modifier.clickable {
-                            scope.launch {
-                                drawerState.close()
+                .fillMaxWidth()
+                .height(180.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary
+                )
+                .padding(12.dp),
+        ) {
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Image(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .then(
+                            // 只有在未登录时才可点击
+                            if (isLoggedIn) {
+                                Modifier.clickable {
+                                    scope.launch {
+                                        drawerState.close()
+                                    }
+                                    navController.navigateToAccount()
+                                }
+                            } else {
+                                Modifier
                             }
-                            navController.navigateToAccount()
+                        ),
+                    painter = painterResource(R.drawable.icon_avatar_default),
+                    contentDescription = stringResource(R.string.drawer_user_avatar)
+                )
+
+                Spacer(Modifier.size(12.dp))
+
+                Text(
+                    text = userName?.takeIf { it.isNotEmpty() } ?: stringResource(R.string.drawer_please_login),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 12.sp
+                )
+
+                Spacer(Modifier.size(12.dp))
+
+                Row(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.drawer_level_placeholder,userCoin?.level?.toString() ?: "-"),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 12.sp
+                    )
+
+                    Spacer(Modifier.size(12.dp))
+
+                    Text(
+                        text = stringResource(R.string.drawer_rank_placeholder,userCoin?.rank?.toString() ?: "-"),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+
+            Icon(
+                modifier = Modifier
+                    .size(48.dp)
+                    .offset(140.dp,12.dp)
+                    .clickable {
+                        scope.launch {
+                            drawerState.close()
                         }
-                    } else {
-                        Modifier
-                    }
-                ),
-            painter = painterResource(R.mipmap.icon_app_logo),
-            tint = MaterialTheme.colorScheme.primary,
-            contentDescription = stringResource(R.string.drawer_user_avatar)
-        )
-
-        Spacer(Modifier.size(12.dp))
-
-        Text(
-            text = userName?.takeIf { it.isNotEmpty() } ?: stringResource(R.string.drawer_please_login),
-            color = MaterialTheme.colorScheme.surface,
-            fontSize = 16.sp
-        )
-
-        Spacer(Modifier.size(28.dp))
+                        navController.navigateToCoinRank()
+                    },
+                painter = painterResource(R.drawable.icon_coin_rank),
+                tint = MaterialTheme.colorScheme.onPrimary,
+                contentDescription = stringResource(R.string.drawer_coin_rank_desc)
+            )
+        }
 
         DrawerItem(
             onItemClick = {
+                if (isLoggedIn){
+                    scope.launch {
+                        drawerState.close()
+                    }
+                    navController.navigateToCoinDetail(userCoin?.coinCount?.toString() ?: "")
+                }
 
+            },
+            imageRes = R.drawable.icon_coin,
+            name = stringResource(R.string.drawer_my_coin),
+            coin = userCoin?.coinCount?.toString()
+        )
+
+        DrawerItem(
+            onItemClick = {
+                if (isLoggedIn){
+                    scope.launch {
+                        drawerState.close()
+                    }
+                }
             },
             imageRes = R.drawable.icon_favorite,
             name = stringResource(R.string.drawer_my_favorites)
@@ -145,14 +222,15 @@ fun DrawerContent(
 fun DrawerItem(
     onItemClick : () -> Unit,
     imageRes : Int,
-    name : String
+    name : String,
+    coin : String? = null
 ){
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .height(48.dp)
+            .padding(horizontal = 12.dp)
+            .height(40.dp)
             .clickable{
                 onItemClick()
             },
@@ -160,22 +238,42 @@ fun DrawerItem(
     ) {
 
         Image(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(18.dp),
             painter = painterResource(imageRes),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
             contentDescription = name
         )
 
-        Spacer(Modifier.size(24.dp))
+        Spacer(Modifier.size(12.dp))
 
         Text(
             text = name,
             color = MaterialTheme.colorScheme.surface,
-            fontSize = 14.sp
+            fontSize = 12.sp
         )
 
+        if (coin != null){
+            Spacer(Modifier.weight(1f))
+            Text(
+                text = coin,
+                color = MaterialTheme.colorScheme.surface,
+                fontSize = 14.sp
+            )
+        }
     }
 
+}
+
+/**
+ * 从 JSON 解析用户积分数据，失败或空时返回 null
+ */
+private fun parsePersonalCoinData(json: String?): CoinData? {
+    if (json.isNullOrBlank()) return null
+    return try {
+        Gson().fromJson(json, CoinData::class.java)
+    } catch (e: Exception) {
+        null
+    }
 }
 
 

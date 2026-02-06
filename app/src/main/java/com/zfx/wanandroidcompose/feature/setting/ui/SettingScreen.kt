@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.width
 import androidx.navigation.NavController
 import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.feature.setting.SettingViewModel
@@ -71,7 +72,7 @@ fun SettingScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(40.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primary
                     ),
@@ -83,7 +84,8 @@ fun SettingScreen(
 
                 Image(
                     modifier = Modifier
-                        .size(24.dp)
+                        .height(24.dp)
+                        .width(12.dp)
                         .clickable {
                             navController.popBackStack()
                                    },
@@ -183,7 +185,7 @@ fun SettingItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .height(56.dp)
+            .height(40.dp)
             .clickable{
                 onItemClick()
             },
@@ -192,7 +194,7 @@ fun SettingItem(
         Text(
             text = name,
             color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-            fontSize = 16.sp
+            fontSize = 12.sp
         )
 
         Spacer(Modifier.weight(1f))
@@ -200,7 +202,7 @@ fun SettingItem(
         Text(
             text = setName,
             color = if (name == stringResource(R.string.settings_theme)) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary,
-            fontSize = 16.sp
+            fontSize = 12.sp
         )
 
         Spacer(Modifier.size(12.dp))

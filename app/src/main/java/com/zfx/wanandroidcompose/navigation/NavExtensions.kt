@@ -1,6 +1,7 @@
 package com.zfx.wanandroidcompose.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.Navigator
 import com.zfx.wanandroidcompose.data.KnowledgeItem
 import com.zfx.wanandroidcompose.util.KnowledgeItemCache
 
@@ -102,6 +103,22 @@ fun NavController.navigateToAccount() {
     navigate(Routes.ACCOUNT) {
         launchSingleTop = true
     }
+}
+
+
+/**
+ * 导航积分排行
+ */
+fun NavController.navigateToCoinRank() {
+    navigate(Routes.COIN_RANK)
+}
+
+
+/**
+ * 积分获取详情（携带 coinCount 参数）
+ */
+fun NavController.navigateToCoinDetail(coinCount: String) {
+    navigate(Routes.buildCoinDetailRoute(coinCount))
 }
 
 /**

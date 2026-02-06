@@ -2,6 +2,8 @@ package com.zfx.wanandroidcompose.service
 
 import com.zfx.wanandroidcompose.data.AccountBody
 import com.zfx.wanandroidcompose.data.User
+import com.zfx.wanandroidcompose.feature.coin.data.CoinData
+import com.zfx.wanandroidcompose.feature.coin.data.PersonalCoinData
 import com.zfx.wanandroidcompose.network.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -38,7 +40,12 @@ interface AccountService {
     /**
      * 退出
      * */
-    @GET("logout/json")
+    @GET("user/logout/json")
     suspend fun signOut(): ApiResponse<String>
+
+
+    //获取个人积分，需要登录后访问
+    @GET("lg/coin/userinfo/json")
+    suspend fun getPersonalCoin() : ApiResponse<CoinData>
 
 }

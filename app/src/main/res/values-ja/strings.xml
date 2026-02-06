@@ -18,6 +18,11 @@
     <!-- 抽屉菜单 -->
     <string name="drawer_user_avatar">ユーザーアバター</string>
     <string name="drawer_please_login">まずログインしてください</string>
+    <string name="drawer_level_placeholder">レベル：%1$s</string>
+    <string name="drawer_rank_placeholder">ランク：%1$s</string>
+    <string name="drawer_coin_placeholder">ポイント：%1$s</string>
+    <string name="drawer_coin_rank_desc">ポイントランキング</string>
+    <string name="drawer_my_coin">マイポイント</string>
     <string name="drawer_my_favorites">お気に入り</string>
     <string name="drawer_system_settings">システム設定</string>
     <string name="drawer_about_us">私たちについて</string>
@@ -122,4 +127,8 @@
     <string name="knowledge_detail_back_button">戻るボタン</string>
     <string name="knowledge_detail_search_button">検索ボタン</string>
     <string name="knowledge_detail_share_button">共有ボタン</string>
+
+    <!-- 积分列表 -->
+    <string name="coin_title">ポイント一覧</string>
+    <string name="coin_rank_title">ポイントランキング</string>
 </resources>

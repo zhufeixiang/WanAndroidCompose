@@ -5,6 +5,8 @@ import com.zfx.commonlib.network.repository.BaseRepository
 import com.zfx.commonlib.network.result.NetworkResult
 import com.zfx.wanandroidcompose.data.AccountBody
 import com.zfx.wanandroidcompose.data.User
+import com.zfx.wanandroidcompose.feature.coin.data.CoinData
+import com.zfx.wanandroidcompose.feature.coin.data.PersonalCoinData
 import com.zfx.wanandroidcompose.service.AccountService
 import kotlinx.coroutines.flow.Flow
 
@@ -54,6 +56,15 @@ class AccountRepository  : BaseRepository() {
         return requestFlow(
             apiCall = {
                 apiService.signOut()
+            }
+        )
+    }
+
+
+    fun getPersonalCoin() : Flow<NetworkResult<CoinData>>{
+        return requestFlow(
+            apiCall = {
+                apiService.getPersonalCoin()
             }
         )
     }

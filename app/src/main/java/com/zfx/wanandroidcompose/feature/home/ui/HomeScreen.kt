@@ -85,7 +85,7 @@ fun HomeScreen(
         header = if (bannerList.isNotEmpty()) {
             {
                 Banner(
-                    modifier = Modifier.height(180.dp),
+                    modifier = Modifier.height(160.dp),
                     items = bannerList,
                     showIndicator = false,
                     indicator = { curPage, pageCount ->

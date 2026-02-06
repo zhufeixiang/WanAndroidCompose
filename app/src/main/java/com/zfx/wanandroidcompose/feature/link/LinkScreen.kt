@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -47,7 +48,7 @@ fun LinkScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(40.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primary
                     ),
@@ -59,7 +60,8 @@ fun LinkScreen(
 
                 Image(
                     modifier = Modifier
-                        .size(24.dp)
+                        .height(24.dp)
+                        .width(12.dp)
                         .clickable {
                             onBackClick?.invoke()
                             navController?.popBackStack() },

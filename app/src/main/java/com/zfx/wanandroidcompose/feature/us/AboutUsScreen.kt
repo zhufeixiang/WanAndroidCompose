@@ -81,7 +81,7 @@ fun AboutUsScreen(
                 Spacer(Modifier.size(20.dp))
 
                 Text(
-                    text = "Compose版玩Android",
+                    text = stringResource(R.string.about_us_app_name),
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 18.sp
                 )

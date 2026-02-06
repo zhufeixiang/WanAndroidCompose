@@ -46,7 +46,7 @@ fun ArticleItem(
     Card(
         modifier = modifier
             .wrapContentHeight()
-            .padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp))
+            .padding(PaddingValues(horizontal = 12.dp, vertical = 4.dp))
             .clickable { cardClick() },
         shape = RoundedCornerShape(8.dp),
         colors = CardColors(
@@ -57,7 +57,7 @@ fun ArticleItem(
         )
     ) {
         Column(
-            modifier = Modifier.padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp)),
+            modifier = Modifier.padding(PaddingValues(horizontal = 12.dp, vertical = 4.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -77,9 +77,9 @@ fun ArticleItem(
                                 color = MaterialTheme.colorScheme.error,
                                 shape = RoundedCornerShape(4.dp)
                             )
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                            .padding(horizontal = 2.dp),
                         text = stringResource(R.string.article_pinned),
-                        fontSize = 14.sp,
+                        fontSize = 8.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -88,7 +88,7 @@ fun ArticleItem(
                         painter = painterResource(id = R.drawable.icon_article_logo),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         contentDescription = stringResource(R.string.article_icon),
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
 
@@ -102,7 +102,7 @@ fun ArticleItem(
                     } else {
                         stringResource(R.string.article_share_user, data.shareUser)
                     },
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.surface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -112,20 +112,20 @@ fun ArticleItem(
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
                     text = data.niceDate,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.onTertiary
                 )
             }
 
             Spacer(
-                modifier = Modifier.height(8.dp)
+                modifier = Modifier.height(4.dp)
             )
 
             // 标题（多行省略）
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = data.title,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.surface,
                 maxLines = 2,
@@ -142,7 +142,7 @@ fun ArticleItem(
                     modifier = Modifier
                         .align(Alignment.CenterVertically),
                     text = "${data.chapterName}/${data.superChapterName}",
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(
@@ -150,7 +150,7 @@ fun ArticleItem(
                 )
                 Image(
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(18.dp)
                         .clickable { favoriteClick() },
                     painter = painterResource(id = if(data.collect){
                         R.drawable.icon_heart_blue

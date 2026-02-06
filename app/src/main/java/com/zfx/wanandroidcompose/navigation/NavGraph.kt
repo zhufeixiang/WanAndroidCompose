@@ -48,6 +48,10 @@ object Routes {
 
     const val SETTING = "setting"
 
+    const val COIN_RANK = "coin_rank"
+
+    const val COIN_DETAIL = "coin_detail/{coinCount}"
+
     // 需要显示底部导航栏的路由
     val routesWithBottomBar = setOf(HOME, KNOWLEDGE,WECHAT,SQUARE,PROGRAM)
     
@@ -62,6 +66,11 @@ object Routes {
         val encodedLink = java.net.URLEncoder.encode(linkUrl, java.nio.charset.StandardCharsets.UTF_8.toString())
         return "link/$encodedTitle/$encodedLink"
     }
+
+    /**
+     * 构建积分详情页路由（携带 coinCount 参数）
+     */
+    fun buildCoinDetailRoute(coinCount: String): String = "coin_detail/$coinCount"
 }
 
 /**

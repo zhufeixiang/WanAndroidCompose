@@ -20,7 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -74,13 +76,19 @@ fun <T> RefreshableLazyList(
     // Material3 的 PullToRefresh 状态
     val pullToRefreshState = rememberPullToRefreshState()
 
+    // 仅当用户发生过滚动后才允许触发加载更多，避免首屏刚渲染就因「倒数第3个已可见」误触
+    var hasUserScrolled by remember { mutableStateOf(false) }
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (listState.isScrollInProgress) hasUserScrolled = true
+    }
+
     // 监听滚动到底部，自动加载更多
     val shouldLoadMore by remember {
         derivedStateOf {
+            if (!hasUserScrolled) return@derivedStateOf false
             val layoutInfo = listState.layoutInfo
             val totalItemsCount = layoutInfo.totalItemsCount
             val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-
             // 当滚动到倒数第 3 个 item 时，触发加载更多（提前加载，提升体验）
             totalItemsCount > 0 && lastVisibleItemIndex >= totalItemsCount - 3
         }
@@ -180,7 +188,7 @@ fun <T> RefreshableLazyList(
                             Text(
                                 text = stringResource(R.string.common_no_more_data),
                                 fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.tertiary,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 textAlign = TextAlign.Center
                             )
                         }
