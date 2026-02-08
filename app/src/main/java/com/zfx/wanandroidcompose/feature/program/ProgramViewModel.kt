@@ -81,8 +81,8 @@ class ProgramViewModel : BaseViewModel() {
         }
     }
 
-    fun setCid(id : Int){
-        this.cid = id
+    fun setId(id : Int){
+        cid = id
     }
 
     fun refresh(){
