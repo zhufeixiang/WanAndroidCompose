@@ -151,15 +151,13 @@ fun ProgramItem(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
                 ){
                     // title
                     Text(
                         modifier = Modifier
-                            .padding(start = 8.dp)
-                            .weight(1f), // 使用 weight 占据剩余空间，配合 maxLines 实现省略
+                            .weight(1f),
                         text = data.title,
-                        fontSize = 10.sp,
+                        fontSize = 8.sp,
                         color = MaterialTheme.colorScheme.surface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -173,17 +171,11 @@ fun ProgramItem(
                         color = MaterialTheme.colorScheme.onTertiary
                     )
                 }
-
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-
                 //描述
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = data.desc,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.surface,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
@@ -199,7 +191,7 @@ fun ProgramItem(
                         } else {
                             stringResource(R.string.article_share_user, data.shareUser)
                         },
-                        fontSize = 8.sp,
+                        fontSize = 6.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(
@@ -207,7 +199,7 @@ fun ProgramItem(
                     )
                     Image(
                         modifier = Modifier
-                            .size(18.dp)
+                            .size(16.dp)
                             .clickable { },
                         painter = painterResource(id = if(data.collect){
                             R.drawable.icon_heart_blue

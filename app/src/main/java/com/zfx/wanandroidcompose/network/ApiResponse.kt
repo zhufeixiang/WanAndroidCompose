@@ -1,6 +1,8 @@
 package com.zfx.wanandroidcompose.network
 
 import com.zfx.commonlib.network.response.IBaseResponse
+import com.zfx.commonlib.util.StringResourceHelper
+import com.zfx.wanandroidcompose.R
 
 class ApiResponse<T>(
     var  data : T? = null,
@@ -12,7 +14,7 @@ class ApiResponse<T>(
     }
 
     override fun getDataOrThrow(): T {
-        return data ?: throw IllegalStateException("响应数据为空")
+        return data ?: throw IllegalStateException(StringResourceHelper.getString(R.string.common_response_empty))
     }
 
     override fun getDataOrDefault(defaultValue: T): T {
@@ -20,7 +22,7 @@ class ApiResponse<T>(
     }
 
     override fun getErrorMessage(): String {
-        return errorMsg.ifEmpty { "未知错误" }
+        return errorMsg.ifEmpty { StringResourceHelper.getString(R.string.common_unknown_error) }
     }
 
     override fun getResponseCode(): Int {

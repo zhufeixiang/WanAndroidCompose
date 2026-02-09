@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
@@ -65,19 +66,20 @@ fun KnowledgeDetailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(40.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primary
                     ),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Spacer(
-                    Modifier.size(24.dp)
+                    Modifier.size(12.dp)
                 )
 
                 Image(
                     modifier = Modifier
-                        .size(24.dp)
+                        .height(24.dp)
+                        .width(16.dp)
                         .clickable {
                             navController.popBackStack()
                         },
@@ -86,12 +88,12 @@ fun KnowledgeDetailScreen(
                     contentDescription = stringResource(R.string.knowledge_detail_back_button)
                 )
                 Spacer(
-                    Modifier.size(48.dp)
+                    Modifier.size(12.dp)
                 )
 
                 Text(
                     text = data.name,
-                    fontSize = 20.sp,
+                    fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(
@@ -142,6 +144,7 @@ fun KnowledgeDetailScreen(
                 val scope = rememberCoroutineScope()
 
                 PrimaryScrollableTabRow(
+                    modifier = Modifier.height(48.dp),
                     selectedTabIndex = pagerState.currentPage,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -161,6 +164,7 @@ fun KnowledgeDetailScreen(
                     }
                 ) {
                     tabData.forEachIndexed { index, title ->
+                        val selected = index == pagerState.currentPage
                         Tab(
                             selected = pagerState.currentPage == index,
                             onClick = {
@@ -171,8 +175,9 @@ fun KnowledgeDetailScreen(
                             text = { 
                                 Text(
                                     text = title, 
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    fontSize = 16.sp
+                                    color = if (selected) MaterialTheme.colorScheme.onPrimary
+                                    else MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                                    fontSize = 12.sp
                                 ) 
                             }
                         )

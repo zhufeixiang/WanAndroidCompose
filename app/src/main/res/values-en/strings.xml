@@ -18,6 +18,11 @@
     <!-- Drawer Menu -->
     <string name="drawer_user_avatar">User Avatar</string>
     <string name="drawer_please_login">Please Login</string>
+    <string name="drawer_level_placeholder">Level: %1$s</string>
+    <string name="drawer_rank_placeholder">Rank: %1$s</string>
+    <string name="drawer_coin_placeholder">Coin：%1$s</string>
+    <string name="drawer_coin_rank_desc">Coin Rank</string>
+    <string name="drawer_my_coin">My Coins</string>
     <string name="drawer_my_favorites">My Favorites</string>
     <string name="drawer_system_settings">System Settings</string>
     <string name="drawer_about_us">About Us</string>
@@ -67,6 +72,14 @@
     <string name="account_password_empty">Please enter password!</string>
     <string name="account_login_success">Login Success</string>
     <string name="account_register_success">Register Success</string>
+    <string name="account_user_login">User Login</string>
+    <string name="account_user_register">User Register</string>
+    <string name="account_please_login_wanandroid">Please login using WanAndroid account</string>
+    <string name="account_no_account_create_one">No account yet? Create one</string>
+    <string name="account_already_have_account">Already have an account? Login</string>
+    <string name="account_reenter_password">Re-enter password</string>
+    <string name="account_reenter_password_hint">Please re-enter password</string>
+    <string name="account_password_not_match">Passwords do not match</string>
     
     <!-- Search Page -->
     <string name="search_back_button">Back Button</string>
@@ -117,10 +130,15 @@
     
     <!-- Link Page -->
     <string name="link_back_button">Back Button</string>
+    <string name="link_more_button">More</string>
     
     <!-- Knowledge Detail -->
     <string name="knowledge_detail_back_button">Back Button</string>
     <string name="knowledge_detail_search_button">Search Button</string>
     <string name="knowledge_detail_share_button">Share Button</string>
+
+    <!-- Coin -->
+    <string name="coin_title">Coin List</string>
+    <string name="coin_rank_title">Coin Rank</string>
 </resources>
 

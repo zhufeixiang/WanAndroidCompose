@@ -16,6 +16,7 @@ import com.zfx.wanandroidcompose.feature.setting.AppLanguage
 import com.zfx.wanandroidcompose.feature.setting.SettingPreferencesKeys
 import com.zfx.wanandroidcompose.feature.setting.settingDataStore
 import com.zfx.wanandroidcompose.navigation.Routes
+import com.zfx.wanandroidcompose.util.AddCookieInterceptor
 import com.zfx.wanandroidcompose.util.CookieInterceptor
 import com.zfx.wanandroidcompose.util.NavControllerManager
 import kotlinx.coroutines.flow.first
@@ -40,8 +41,9 @@ class App : Application(), SingletonImageLoader.Factory {
         initNetworkManager(
             NetworkConfigBuilder()
                 .baseUrl("https://www.wanandroid.com")
-                .addInterceptor(CookieInterceptor())
-                .logLevel(LoggingInterceptor.LogLevel.NONE)
+                .addInterceptor(AddCookieInterceptor())  // 请求时携带本地 Cookie
+                .addInterceptor(CookieInterceptor())   // 响应时保存 Set-Cookie
+                .logLevel(LoggingInterceptor.LogLevel.BODY)
                 .build()
         )
 

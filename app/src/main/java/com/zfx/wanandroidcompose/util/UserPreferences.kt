@@ -10,6 +10,8 @@ object UserPreferences {
     private const val KEY_USERNAME = "loginUserName"
     private const val KEY_TOKEN = "token_pass"
 
+    private const val KEY_COIN_DATA = "coin_data"
+
     /**
      * 保存用户名
      */
@@ -39,11 +41,27 @@ object UserPreferences {
     }
 
     /**
+     * 存储 用户积分相关信息
+     */
+    fun setPersonalCoin(coinData : String){
+        SPUtils.getInstance().put(KEY_COIN_DATA,coinData)
+
+    }
+
+    /**
+     * 获取 用户积分相关信息
+     */
+    fun getPersonalCoin() : String?{
+        return SPUtils.getInstance().getString(KEY_COIN_DATA,null)
+    }
+
+    /**
      * 清除所有用户信息
      */
     fun clear() {
         SPUtils.getInstance().remove(KEY_USERNAME)
         SPUtils.getInstance().remove(KEY_TOKEN)
+        SPUtils.getInstance().remove(KEY_COIN_DATA)
     }
 
     /**

@@ -7,9 +7,9 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -48,6 +48,10 @@ object Routes {
 
     const val SETTING = "setting"
 
+    const val COIN_RANK = "coin_rank"
+
+    const val COIN_DETAIL = "coin_detail/{coinCount}"
+
     // 需要显示底部导航栏的路由
     val routesWithBottomBar = setOf(HOME, KNOWLEDGE,WECHAT,SQUARE,PROGRAM)
     
@@ -62,6 +66,11 @@ object Routes {
         val encodedLink = java.net.URLEncoder.encode(linkUrl, java.nio.charset.StandardCharsets.UTF_8.toString())
         return "link/$encodedTitle/$encodedLink"
     }
+
+    /**
+     * 构建积分详情页路由（携带 coinCount 参数）
+     */
+    fun buildCoinDetailRoute(coinCount: String): String = "coin_detail/$coinCount"
 }
 
 /**
@@ -113,6 +122,8 @@ fun NavGraphBuilder.composableWithSlideAnimation(
     }
 }
 
+private val defaultBarsVisibleState = mutableStateOf(true)
+
 /**
  * 注册所有路由
  * 使用模块化的方式组织导航配置，提高可维护性
@@ -120,15 +131,15 @@ fun NavGraphBuilder.composableWithSlideAnimation(
 fun NavGraphBuilder.setupNavigation(
     navController: NavController,
     onToggleBars: (Boolean) -> Unit = {},
+    barsVisible: State<Boolean> = defaultBarsVisibleState,
     drawerState: androidx.compose.material3.DrawerState? = null,
-    nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null,
     settingViewModel: com.zfx.wanandroidcompose.feature.setting.SettingViewModel? = null
 ) {
     val config = NavConfig(
         navController = navController,
         onToggleBars = onToggleBars,
+        barsVisible = barsVisible,
         drawerState = drawerState,
-        nestedScrollConnection = nestedScrollConnection,
         settingViewModel = settingViewModel
     )
     

@@ -126,13 +126,9 @@ fun KnowledgeItem(
                 Text(
                     text = "${data.name}",
                     color = MaterialTheme.colorScheme.surface,
-                    fontSize = 14.sp,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Normal
                 )
-                Spacer(
-                    modifier = Modifier.size(8.dp)
-                )
-
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
@@ -143,7 +139,7 @@ fun KnowledgeItem(
                             modifier = Modifier.padding(PaddingValues(horizontal = 2.dp, vertical = 2.dp)),
                             text = child.name,
                             color = MaterialTheme.colorScheme.onTertiary,
-                            fontSize = 12.sp
+                            fontSize = 10.sp
                         )
                     }
                 }

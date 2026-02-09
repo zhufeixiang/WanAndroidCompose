@@ -1,75 +1,108 @@
 package com.zfx.wanandroidcompose.feature.knowledge.ui
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.feature.navigation.ui.NavigationScreen
+import com.zfx.wanandroidcompose.navigation.Routes
+import com.zfx.wanandroidcompose.ui.components.ScrollableTopBar
 import kotlinx.coroutines.launch
 
+private val defaultBarsVisibleState = mutableStateOf(true)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KnowledgeScreen(
     navController: NavController? = null,
     onToggleBars: (Boolean) -> Unit = {},
-    nestedScrollConnection: NestedScrollConnection? = null
-){
-
-
-
+    barsVisible: State<Boolean> = defaultBarsVisibleState,
+    drawerState: androidx.compose.material3.DrawerState? = null
+) {
+    val barsVisibleValue by barsVisible
     val context = LocalContext.current
     val tabData = remember {
         listOf(context.getString(R.string.knowledge_system), context.getString(R.string.knowledge_navigation))
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        val pagerState = rememberPagerState(
-            initialPage = 0,
-            pageCount = { tabData.size }
-        )
-        val scope = rememberCoroutineScope()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { tabData.size }
+    )
+    val scope = rememberCoroutineScope()
+    // 仅 TopBar 随滚动收起，TabBar 始终吸顶
+    val topBarHeight by animateDpAsState(
+        targetValue = if (barsVisibleValue) 40.dp else 0.dp,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "topBarHeight"
+    )
 
+    Column(
+        modifier = Modifier.fillMaxSize().statusBarsPadding()
+    ) {
+        Box(
+            modifier = Modifier
+                .height(topBarHeight)
+                .clipToBounds()
+        ) {
+            if (drawerState != null) {
+                ScrollableTopBar(
+                    title = stringResource(R.string.title_knowledge),
+                    drawerState = drawerState,
+                    scrollBehavior = scrollBehavior,
+                    onTrailingIconClick = { navController?.navigate(Routes.SEARCH) },
+                    barsVisible = barsVisibleValue
+                )
+            }
+        }
         PrimaryScrollableTabRow(
+            modifier = Modifier.height(48.dp),
             selectedTabIndex = pagerState.currentPage,
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
-            edgePadding = 0.dp, // 移除左右边距
-            // 不设置 minTabWidth，让 Tab 根据内容自适应宽度
+            edgePadding = 0.dp,
             indicator = {
-                // PrimaryScrollableTabRow 使用 PrimaryIndicator
-                // indicator 是 TabIndicatorScope 的扩展函数，不需要显式参数
                 TabRowDefaults.PrimaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(
                         selectedTabIndex = pagerState.currentPage,
                         matchContentSize = true
                     ),
-                    color = MaterialTheme.colorScheme.onPrimary,   // 指示器颜色
-                    height = 2.dp                // 指示器高度
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    height = 2.dp
                 )
             }
         ) {
             tabData.forEachIndexed { index, title ->
+                val selected = pagerState.currentPage == index
                 Tab(
-                    selected = pagerState.currentPage == index,
+                    selected = selected,
                     onClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(index)
@@ -78,8 +111,9 @@ fun KnowledgeScreen(
                     text = {
                         Text(
                             text = title,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 16.sp
+                            color = if (selected) MaterialTheme.colorScheme.onPrimary
+                                else MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                            fontSize = 12.sp
                         )
                     }
                 )
@@ -91,13 +125,11 @@ fun KnowledgeScreen(
             modifier = Modifier.weight(1f),
             key = { page -> page }
         ) { page ->
-            if (page == 0){
-                KnowledgePage(navController = navController, onToggleBars = onToggleBars, nestedScrollConnection = nestedScrollConnection)
-            }else{
-                NavigationScreen(navController = navController, onToggleBars = onToggleBars, nestedScrollConnection = nestedScrollConnection)
+            if (page == 0) {
+                KnowledgePage(navController = navController, onToggleBars = onToggleBars, nestedScrollConnection = null)
+            } else {
+                NavigationScreen(navController = navController, onToggleBars = onToggleBars, nestedScrollConnection = null)
             }
         }
     }
-
-
 }

@@ -1,10 +1,13 @@
 package com.zfx.wanandroidcompose.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -14,17 +17,54 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blankj.utilcode.util.ToastUtils
+import androidx.compose.foundation.layout.Box
 import com.zfx.wanandroidcompose.R
 import kotlinx.coroutines.launch
+
+/**
+ * 沉浸式顶/底栏动画包装：根据 barsVisible 做滑入滑出 + 透明度动画
+ */
+@Composable
+fun ImmersiveBar(
+    barsVisible: Boolean,
+    heightDp: Dp,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val density = LocalDensity.current
+    val heightPx = with(density) { heightDp.toPx() }
+    val translationY by animateFloatAsState(
+        targetValue = if (barsVisible) 0f else -heightPx,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "immersiveBarTranslationY"
+    )
+    val alpha by animateFloatAsState(
+        targetValue = if (barsVisible) 1f else 0f,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "immersiveBarAlpha"
+    )
+    Box(
+        modifier = modifier.graphicsLayer {
+            this.translationY = translationY
+            this.alpha = alpha
+        }
+    ) {
+        content()
+    }
+}
 
 /**
  * 顶部导航栏内容（可复用组件）
@@ -65,7 +105,7 @@ fun TopBarContent(
         Text(
             text = title,
             color = colorResource(R.color.white),
-            fontSize = 18.sp
+            fontSize = 16.sp
         )
 
         Spacer(Modifier.weight(1f))
@@ -82,6 +122,8 @@ fun TopBarContent(
 
 /**
  * 顶部导航栏（使用 TopAppBar + nestedScroll，支持整体滚动）
+ * @param barsVisible 沉浸式阅读：为 false 时顶栏滑出隐藏（带动画）
+ * @param onTrailingIconClick 右侧图标点击；为 null 时不显示右侧图标
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,22 +131,41 @@ fun ScrollableTopBar(
     title: String,
     drawerState: androidx.compose.material3.DrawerState,
     scrollBehavior: TopAppBarScrollBehavior,
-    onSearchClick: (() -> Unit)? = null
+    trailingIcon : Int = R.drawable.icon_search_white,
+    onTrailingIconClick: (() -> Unit)? = null,
+    barsVisible: Boolean = true
 ) {
     val scope = rememberCoroutineScope()
-    // 在 @Composable 函数体内获取字符串资源
     val searchClickMessage = stringResource(R.string.topbar_click_search)
-    
-    val actualOnSearchClick = onSearchClick ?: {
+    val actualOnTrailingIconClick = onTrailingIconClick ?: {
         ToastUtils.showShort(searchClickMessage)
     }
-    
+
+    val density = LocalDensity.current
+    val barHeightPx = with(density) { 40.dp.toPx() }
+    val topBarTranslationY by animateFloatAsState(
+        targetValue = if (barsVisible) 0f else -barHeightPx,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "topBarTranslationY"
+    )
+    val topBarAlpha by animateFloatAsState(
+        targetValue = if (barsVisible) 1f else 0f,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "topBarAlpha"
+    )
+
     TopAppBar(
+        modifier = Modifier
+            .height(40.dp)
+            .graphicsLayer {
+                translationY = topBarTranslationY
+                alpha = topBarAlpha
+            },
         title = {
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
         },
         navigationIcon = {
@@ -123,12 +184,14 @@ fun ScrollableTopBar(
             }
         },
         actions = {
-            IconButton(onClick = actualOnSearchClick) {
-                Image(
-                    painter = painterResource(R.drawable.icon_search_white),
-                    contentDescription = stringResource(R.string.topbar_search),
-                    modifier = Modifier.size(24.dp)
-                )
+            if (onTrailingIconClick != null) {
+                IconButton(onClick = actualOnTrailingIconClick) {
+                    Image(
+                        painter = painterResource(trailingIcon),
+                        contentDescription = stringResource(R.string.topbar_search),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(

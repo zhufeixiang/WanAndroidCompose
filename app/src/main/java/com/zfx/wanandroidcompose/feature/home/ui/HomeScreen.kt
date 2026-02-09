@@ -1,8 +1,11 @@
 package com.zfx.wanandroidcompose.feature.home.ui
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,19 +13,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,7 +41,9 @@ import com.zfx.wanandroidcompose.data.Article
 import com.zfx.commonlib.ext.compose.Banner
 import com.zfx.wanandroidcompose.navigation.Routes
 import com.zfx.wanandroidcompose.ui.components.RefreshableLazyList
+import com.zfx.wanandroidcompose.ui.components.ScrollableTopBar
 
+private val defaultBarsVisibleState = mutableStateOf(true)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,9 +53,10 @@ fun HomeScreen(
     onArticleClick: ((Article) -> Unit)? = null,
     navController: NavController? = null,
     onToggleBars: (Boolean) -> Unit = {},
-    drawerState: androidx.compose.material3.DrawerState? = null,
-    nestedScrollConnection: NestedScrollConnection? = null
-){
+    barsVisible: State<Boolean> = defaultBarsVisibleState,
+    drawerState: androidx.compose.material3.DrawerState? = null
+) {
+    val barsVisibleValue by barsVisible
     val bannerList by viewModel.bannerList.collectAsState()
     val topArticleList by viewModel.topArticle.collectAsState()
     val articleList by viewModel.articleList.collectAsState()
@@ -56,8 +66,8 @@ fun HomeScreen(
     val isInitialLoading by viewModel.isInitialLoading.collectAsState()
 
     val listState = rememberLazyListState()
-    
-    // 滚动时控制 BottomBar 显隐
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     LaunchedEffect(listState) {
         var last = 0
         snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
@@ -74,18 +84,43 @@ fun HomeScreen(
             }
     }
 
-    RefreshableLazyList(
-        items = topArticleList + articleList,
-        modifier = modifier.fillMaxWidth(),
-        isLoading = isLoading,
-        hasMore = hasMore,
-        isRefreshing = isRefreshing || isInitialLoading,  // 初始加载时也显示刷新指示器
-        listState = listState,
-        nestedScrollConnection = nestedScrollConnection,
-        header = if (bannerList.isNotEmpty()) {
+    val topBarHeight by animateDpAsState(
+        targetValue = if (barsVisibleValue) 40.dp else 0.dp,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "topBarHeight"
+    )
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+        if (drawerState != null) {
+            Box(
+                modifier = Modifier
+                    .height(topBarHeight)
+                    .clipToBounds()
+            ) {
+                ScrollableTopBar(
+                    title = stringResource(R.string.title_wan_android),
+                    drawerState = drawerState,
+                    scrollBehavior = scrollBehavior,
+                    onTrailingIconClick = { navController?.navigate(Routes.SEARCH) },
+                    barsVisible = barsVisibleValue
+                )
+            }
+        }
+        RefreshableLazyList(
+            items = topArticleList + articleList,
+            modifier = Modifier.fillMaxWidth().weight(1f),
+            isLoading = isLoading,
+            hasMore = hasMore,
+            isRefreshing = isRefreshing || isInitialLoading,
+            listState = listState,
+            nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+            header = if (bannerList.isNotEmpty()) {
             {
                 Banner(
-                    modifier = Modifier.height(180.dp),
+                    modifier = Modifier.height(160.dp),
                     items = bannerList,
                     showIndicator = false,
                     indicator = { curPage, pageCount ->
@@ -117,18 +152,19 @@ fun HomeScreen(
         itemKey = { article -> "${article.id}_${article.publishTime}" },
         onLoadMore = { viewModel.loadMore() },
         onRefresh = { viewModel.refresh() }
-    ) { article ->
-        ArticleItem(
-            data = article,
-            favoriteClick = {
-                ToastUtils.showShort("收藏文章：${article.title}")
-            },
-            cardClick = {
-                onArticleClick?.invoke(article)
-                navController?.let { nav ->
-                    nav.navigate(Routes.buildLinkRoute(article.title, article.link))
+        ) { article ->
+            ArticleItem(
+                data = article,
+                favoriteClick = {
+                    ToastUtils.showShort("收藏文章：${article.title}")
+                },
+                cardClick = {
+                    onArticleClick?.invoke(article)
+                    navController?.let { nav ->
+                        nav.navigate(Routes.buildLinkRoute(article.title, article.link))
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }

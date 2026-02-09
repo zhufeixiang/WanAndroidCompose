@@ -10,12 +10,19 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,162 +65,35 @@ fun SearchScreen(
     val hotSearch by viewModel.hotSearch.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     
-    // SearchBar 的状态
-    var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
-    
-    // 控制是否显示搜索结果
     val showResults = query.isNotBlank() && searchResults.isNotEmpty()
-    
-    // 在 Composable 中获取颜色，用于 drawBehind
-    val backgroundColor = MaterialTheme.colorScheme.onPrimary
-    
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.onPrimary)
     ) {
+        // 自定义 SearchBar
+        CustomSearchBar(
+            query = query,
+            onQueryChange = { newQuery ->
+                query = newQuery
+                if (newQuery.isNotBlank()) {
+                    viewModel.search(newQuery)
+                }
+            },
+            onSearch = { searchQuery ->
+                if (searchQuery.isNotBlank()) {
+                    viewModel.search(searchQuery)
+                    viewModel.addToHistory(searchQuery)
+                    focusManager.clearFocus()
+                }
+            },
+            onBackClick = { navController.popBackStack() },
+            onClearClick = { query = "" }
+        )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Spacer(
-                Modifier.size(24.dp)
-            )
-
-            Image(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        navController.popBackStack() },
-                painter = painterResource(R.drawable.icon_back_white),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                contentDescription = stringResource(R.string.search_back_button)
-            )
-            Spacer(
-                Modifier.size(12.dp)
-            )
-
-            // SearchBar 组件（使用新 API，自定义外观）
-            SearchBar(
-                inputField = {
-                    SearchBarDefaults.InputField(
-                        query = query,
-                        onQueryChange = { newQuery ->
-                            query = newQuery
-                            if (newQuery.isNotBlank()) {
-                                viewModel.search(newQuery)
-                            }
-                        },
-                        onSearch = { searchQuery ->
-                            if (searchQuery.isNotBlank()) {
-                                viewModel.search(searchQuery)
-                                viewModel.addToHistory(searchQuery)
-                            }
-                        },
-                        expanded = active,
-                        onExpandedChange = { active = it },
-                        placeholder = { 
-                            Text(
-                                text = stringResource(R.string.search_placeholder),
-                                color = MaterialTheme.colorScheme.onTertiary
-                            ) 
-                        },
-                        leadingIcon = {
-                            IconButton(
-                                onClick = {
-                                    if (active) {
-                                        active = false
-                                    } else {
-                                        navController.popBackStack()
-                                    }
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = stringResource(R.string.search_icon),
-                                    tint = MaterialTheme.colorScheme.onTertiary
-                                )
-                            }
-                        },
-                        trailingIcon = {
-                            if (query.isNotBlank()) {
-                                IconButton(onClick = { query = "" }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = stringResource(R.string.search_clear),
-                                        tint = MaterialTheme.colorScheme.onTertiary
-                                    )
-                                }
-                            }
-                        },
-                        // 自定义输入框内部颜色
-                        colors = SearchBarDefaults.inputFieldColors(
-                            focusedContainerColor = MaterialTheme.colorScheme.onPrimary, // 聚焦时输入框背景色（白色）
-                            unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary, // 未聚焦时输入框背景色（白色）
-                            focusedTextColor = MaterialTheme.colorScheme.surface, // 聚焦时文本颜色
-                            unfocusedTextColor = MaterialTheme.colorScheme.surface, // 未聚焦时文本颜色
-                            focusedPlaceholderColor = MaterialTheme.colorScheme.onTertiary, // 聚焦时占位符颜色
-                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onTertiary, // 未聚焦时占位符颜色
-                            focusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary, // 聚焦时前导图标颜色
-                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary, // 未聚焦时前导图标颜色
-                            focusedTrailingIconColor = MaterialTheme.colorScheme.onTertiary, // 聚焦时后置图标颜色
-                            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onTertiary // 未聚焦时后置图标颜色
-                        )
-                    )
-                },
-                expanded = active,
-                onExpandedChange = { active = it },
-                // 自定义 SearchBar 外观
-                shape = RoundedCornerShape(20.dp), // 圆角（可根据需要调整，如 16.dp, 24.dp 等）
-                colors = SearchBarDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary // SearchBar 容器背景色
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 0.dp, vertical = 0.dp) // 自定义 SearchBar 外部 padding（可根据需要调整）
-                    .drawBehind {
-                        // 绘制矩形覆盖下划线区域，去除下划线
-                        // 注意：drawBehind 中不能使用 @Composable 函数，需要在外部获取颜色
-                        drawRect(
-                            color = backgroundColor,  // 使用外部获取的颜色
-                            topLeft = androidx.compose.ui.geometry.Offset(0f, size.height - 2.dp.toPx()),
-                            size = androidx.compose.ui.geometry.Size(size.width, 2.dp.toPx())
-                        )
-                    }
-            ) {
-                // SearchBar 展开时显示的内容（搜索建议、历史记录等）
-                SearchSuggestions(
-                    searchHistory = searchHistory,
-                    hotSearch = hotSearch,
-                    onHistoryClick = { history ->
-                        query = history
-                        viewModel.search(history)
-                        active = false
-                    },
-                    onHotSearchClick = { hot ->
-                        query = hot.name
-                        viewModel.search(hot.name)
-                        viewModel.addToHistory(hot.name)
-                        active = false
-                    },
-                    onClearHistory = { viewModel.clearHistory() }
-                )
-            }
-
-            Spacer(
-                Modifier.size(24.dp)
-            )
-
-        }
-
-        
         // 搜索结果列表
         if (showResults) {
             SearchResultsList(
@@ -225,9 +105,9 @@ fun SearchScreen(
                     )
                 }
             )
-        } else if (query.isBlank() && !active) {
-            // 默认显示：搜索历史和热门搜索
-            DefaultSearchContent(
+        } else if (query.isBlank()) {
+            // 默认显示：搜索建议（历史 + 热门）
+            SearchSuggestions(
                 searchHistory = searchHistory,
                 hotSearch = hotSearch,
                 onHistoryClick = { history ->
@@ -246,7 +126,79 @@ fun SearchScreen(
 }
 
 /**
- * 搜索建议内容（SearchBar 展开时显示）
+ * 自定义搜索栏：返回键、输入框、清除按钮，支持键盘搜索
+ */
+@Composable
+fun CustomSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    onBackClick: () -> Unit,
+    onClearClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .background(MaterialTheme.colorScheme.primary),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(Modifier.size(12.dp))
+        Image(
+            modifier = Modifier
+                .height(24.dp)
+                .width(16.dp)
+                .clickable(onClick = onBackClick),
+            painter = painterResource(R.drawable.icon_back_white),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+            contentDescription = stringResource(R.string.search_back_button)
+        )
+        Spacer(Modifier.size(24.dp))
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .heightIn(min = 32.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier.weight(1f)) {
+                if (query.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.search_placeholder),
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
+                        fontSize = 12.sp
+                    )
+                }
+                BasicTextField(
+                    value = query,
+                    onValueChange = onQueryChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 12.sp
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = { onSearch(query) }),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary)
+                )
+            }
+            if (query.isNotBlank()) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.search_clear),
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable(onClick = onClearClick)
+                )
+            }
+        }
+        Spacer(Modifier.size(16.dp))
+    }
+}
+
+/**
+ * 搜索建议内容：未输入关键词时在搜索栏下方显示历史与热门
  */
 @Composable
 fun SearchSuggestions(
@@ -271,12 +223,12 @@ fun SearchSuggestions(
                 ) {
                     Text(
                         text = stringResource(R.string.search_history),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     TextButton(onClick = onClearHistory) {
-                        Text(stringResource(R.string.search_clear_history), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
+                        Text(stringResource(R.string.search_clear_history), fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                 }
             }
@@ -306,14 +258,14 @@ fun SearchSuggestions(
                 ) {
                     Text(
                         text = stringResource(R.string.search_hot),
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Image(
                         painter = painterResource(R.drawable.icon_hot_white),
-                        modifier = Modifier.size(16.dp), // 设置图标大小
+                        modifier = Modifier.size(14.dp), // 设置图标大小
                         colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.error),
                         contentDescription = stringResource(R.string.search_hot_icon)
                     )
@@ -351,8 +303,8 @@ fun DefaultSearchContent(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // 搜索历史
         if (searchHistory.isNotEmpty()) {
@@ -364,12 +316,12 @@ fun DefaultSearchContent(
                 ) {
                     Text(
                         text = stringResource(R.string.search_history),
-                        fontSize = 18.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.surface
                     )
                     TextButton(onClick = onClearHistory) {
-                        Text(stringResource(R.string.search_clear_history), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
+                        Text(stringResource(R.string.search_clear_history), fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                 }
             }
@@ -393,8 +345,8 @@ fun DefaultSearchContent(
         if (hotSearch.isNotEmpty()) {
             item {
                 Text(
-                    text = "热门搜索",
-                    fontSize = 18.sp,
+                    text = stringResource(R.string.search_hot),
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.surface
                 )
@@ -480,7 +432,7 @@ fun SearchChip(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         color = if (isHot) {
             MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
         } else {
@@ -490,8 +442,8 @@ fun SearchChip(
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            fontSize = 14.sp,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            fontSize = 10.sp,
             color = if (isHot) {
                 MaterialTheme.colorScheme.primary
             } else {

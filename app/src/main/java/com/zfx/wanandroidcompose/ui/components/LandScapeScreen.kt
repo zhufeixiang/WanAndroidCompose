@@ -1,6 +1,7 @@
 package com.zfx.wanandroidcompose.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,9 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemColors
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -63,11 +62,6 @@ fun LandScapeScreen(
 
     // BottomBar 显隐状态
     val barsVisible = remember { mutableStateOf(true) }
-
-    // 全局 TopBar 的滚动行为
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-
 
     Row(
         modifier = Modifier.fillMaxSize(),
@@ -206,40 +200,20 @@ fun LandScapeScreen(
 
         }
 
-        Scaffold(
-            modifier = Modifier.fillMaxHeight()
-                .weight(1f),
-            topBar = {
-                // 只在需要显示全局 TopBar 的路由中显示
-                if (navState.showGlobalTopBar) {
-                    ScrollableTopBar(
-                        title = stringResource(navState.currentTitleResId),
-                        drawerState = drawerState,
-                        scrollBehavior = scrollBehavior,
-                        onSearchClick = {
-                            navController.navigate(Routes.SEARCH)
-                        }
-                    )
-                }
-            }
-        ) { paddingValues ->
-            NavHost(
+        NavHost(
+            navController = navController,
+            startDestination = Routes.HOME,
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f)
+        ) {
+            setupNavigation(
                 navController = navController,
-                startDestination = Routes.HOME,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                // 使用统一的导航配置，传递 drawerState 和 nestedScrollConnection
-                setupNavigation(
-                    navController = navController,
-                    onToggleBars = { show -> barsVisible.value = show },
-                    drawerState = drawerState,
-                    nestedScrollConnection = scrollBehavior.nestedScrollConnection,
-                    settingViewModel = settingViewModel
-                )
-            }
-
+                onToggleBars = { show -> barsVisible.value = show },
+                barsVisible = barsVisible,
+                drawerState = drawerState,
+                settingViewModel = settingViewModel
+            )
         }
     }
 
