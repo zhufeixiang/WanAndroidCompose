@@ -67,7 +67,7 @@ fun CoinScreen(
 
                 Image(
                     modifier = Modifier
-                        .width(12.dp)
+                        .width(16.dp)
                         .height(24.dp)
                         .clickable {
                             navController.popBackStack()
@@ -78,12 +78,12 @@ fun CoinScreen(
                 )
 
                 Spacer(
-                    Modifier.size(24.dp)
+                    Modifier.size(12.dp)
                 )
 
                 Text(
                     text = stringResource(R.string.coin_rank_title),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }

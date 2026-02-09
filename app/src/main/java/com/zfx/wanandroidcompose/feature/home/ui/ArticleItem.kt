@@ -117,9 +117,6 @@ fun ArticleItem(
                 )
             }
 
-            Spacer(
-                modifier = Modifier.height(4.dp)
-            )
 
             // 标题（多行省略）
             Text(

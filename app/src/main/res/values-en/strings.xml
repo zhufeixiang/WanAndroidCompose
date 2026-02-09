@@ -130,6 +130,7 @@
     
     <!-- Link Page -->
     <string name="link_back_button">Back Button</string>
+    <string name="link_more_button">More</string>
     
     <!-- Knowledge Detail -->
     <string name="knowledge_detail_back_button">Back Button</string>

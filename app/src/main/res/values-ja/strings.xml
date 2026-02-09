@@ -72,6 +72,14 @@
     <string name="account_password_empty">パスワードを入力してください！</string>
     <string name="account_login_success">ログイン成功</string>
     <string name="account_register_success">登録成功</string>
+    <string name="account_user_login">ユーザーログイン</string>
+    <string name="account_user_register">ユーザー登録</string>
+    <string name="account_please_login_wanandroid">WanAndroidアカウントでログインしてください</string>
+    <string name="account_no_account_create_one">アカウントをお持ちでないですか？登録する</string>
+    <string name="account_already_have_account">すでにアカウントをお持ちですか？ログイン</string>
+    <string name="account_reenter_password">パスワード再入力</string>
+    <string name="account_reenter_password_hint">パスワードを再入力してください</string>
+    <string name="account_password_not_match">入力した2つのパスワードが一致しません</string>
     
     <!-- 搜索页面 -->
     <string name="search_back_button">戻るボタン</string>
@@ -122,6 +130,7 @@
     
     <!-- 链接页面 -->
     <string name="link_back_button">戻るボタン</string>
+    <string name="link_more_button">もっと見るボタン</string>
     
     <!-- 知识体系详情 -->
     <string name="knowledge_detail_back_button">戻るボタン</string>

@@ -192,7 +192,7 @@ fun KnowledgeItemListItem(
     Card(
         modifier = Modifier
             .wrapContentHeight()
-            .padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp))
+            .padding(PaddingValues(horizontal = 12.dp, vertical = 4.dp))
             .clickable { cardClick() },
         shape = RoundedCornerShape(8.dp),
         colors = CardColors(
@@ -203,7 +203,7 @@ fun KnowledgeItemListItem(
         )
     ) {
         Column(
-            modifier = Modifier.padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp)),
+            modifier = Modifier.padding(PaddingValues(horizontal = 12.dp, vertical = 4.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -214,7 +214,7 @@ fun KnowledgeItemListItem(
                     painter = painterResource(id = R.drawable.icon_article_logo),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     contentDescription = stringResource(R.string.article_icon),
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(16.dp)
                 )
                 Spacer(
                     modifier = Modifier.weight(1f)
@@ -222,21 +222,16 @@ fun KnowledgeItemListItem(
                 Text(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     text = data.niceDate,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.onTertiary
                 )
             }
-
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
-
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
                 text = data.title,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.surface
             )
@@ -250,7 +245,7 @@ fun KnowledgeItemListItem(
                 )
                 Image(
                     modifier = Modifier
-                        .size(24.dp),
+                        .size(16.dp),
                     painter = painterResource(id = if(data.collect){
                         R.drawable.icon_heart_blue
                     }else{

@@ -1,6 +1,7 @@
 package com.zfx.wanandroidcompose.navigation
 
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -27,8 +28,8 @@ import java.nio.charset.StandardCharsets
 data class NavConfig(
     val navController: NavController,
     val onToggleBars: (Boolean) -> Unit = {},
+    val barsVisible: State<Boolean> = androidx.compose.runtime.mutableStateOf(true),
     val drawerState: androidx.compose.material3.DrawerState? = null,
-    val nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null,
     val settingViewModel: com.zfx.wanandroidcompose.feature.setting.SettingViewModel? = null
 )
 
@@ -41,45 +42,44 @@ fun NavGraphBuilder.setupMainNavigation(config: NavConfig) {
         HomeScreen(
             navController = config.navController,
             onToggleBars = config.onToggleBars,
-            drawerState = config.drawerState,
-            nestedScrollConnection = config.nestedScrollConnection
+            barsVisible = config.barsVisible,
+            drawerState = config.drawerState
         )
     }
 
-
-    // Square
     composableWithSlideAnimation(route = Routes.SQUARE) {
         SquareScreen(
             navController = config.navController,
             onToggleBars = config.onToggleBars,
-            nestedScrollConnection = config.nestedScrollConnection
+            barsVisible = config.barsVisible,
+            drawerState = config.drawerState
         )
     }
-    
-    // Knowledge
+
     composableWithSlideAnimation(route = Routes.KNOWLEDGE) {
         KnowledgeScreen(
             navController = config.navController,
             onToggleBars = config.onToggleBars,
-            nestedScrollConnection = config.nestedScrollConnection
+            barsVisible = config.barsVisible,
+            drawerState = config.drawerState
         )
     }
-    
-    // Wechat
+
     composableWithSlideAnimation(route = Routes.WECHAT) {
         WechatScreen(
             navController = config.navController,
             onToggleBars = config.onToggleBars,
-            nestedScrollConnection = config.nestedScrollConnection
+            barsVisible = config.barsVisible,
+            drawerState = config.drawerState
         )
     }
 
-    // Program
     composableWithSlideAnimation(route = Routes.PROGRAM) {
         ProgramScreen(
             navController = config.navController,
             onToggleBars = config.onToggleBars,
-            nestedScrollConnection = config.nestedScrollConnection
+            barsVisible = config.barsVisible,
+            drawerState = config.drawerState
         )
     }
 

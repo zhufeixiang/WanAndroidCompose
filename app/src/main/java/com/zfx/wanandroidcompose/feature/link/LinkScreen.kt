@@ -2,9 +2,12 @@ package com.zfx.wanandroidcompose.feature.link
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +28,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -45,39 +49,75 @@ fun LinkScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            Row(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Spacer(
-                    Modifier.size(24.dp)
-                )
-
-                Image(
+                .fillMaxWidth()
+                .height(40.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary
+                )){
+                Row(
                     modifier = Modifier
-                        .height(24.dp)
-                        .width(12.dp)
-                        .clickable {
-                            onBackClick?.invoke()
-                            navController?.popBackStack() },
-                    painter = painterResource(R.drawable.icon_back_white),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    contentDescription = stringResource(R.string.link_back_button)
-                )
-
-                Center() {
-                    Text(
-                        text = title,
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        .fillMaxHeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Spacer(
+                        Modifier.size(12.dp)
                     )
+
+                    Image(
+                        modifier = Modifier
+                            .height(24.dp)
+                            .width(16.dp)
+                            .clickable {
+                                onBackClick?.invoke()
+                                navController?.popBackStack() },
+                        painter = painterResource(R.drawable.icon_back_white),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                        contentDescription = stringResource(R.string.link_back_button)
+                    )
+
+                    Spacer(
+                        Modifier.weight(1f)
+                    )
+
+                    Image(
+                        modifier = Modifier
+                            .height(24.dp)
+                            .width(24.dp)
+                            .clickable {
+                                //TODO:更多按钮pop
+                            },
+                        painter = painterResource(R.drawable.icon_more),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                        contentDescription = stringResource(R.string.link_more_button)
+                    )
+
+                    Spacer(
+                        Modifier.size(12.dp)
+                    )
+
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 60.dp)
+                ){
+                    Center() {
+                        Text(
+                            text = title,
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            modifier = Modifier.basicMarquee(),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
+
+
+
         }
     ) {  paddingValues ->
 

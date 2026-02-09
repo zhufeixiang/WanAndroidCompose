@@ -79,13 +79,13 @@ fun SettingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Spacer(
-                    Modifier.size(24.dp)
+                    Modifier.size(12.dp)
                 )
 
                 Image(
                     modifier = Modifier
                         .height(24.dp)
-                        .width(12.dp)
+                        .width(16.dp)
                         .clickable {
                             navController.popBackStack()
                                    },
@@ -95,12 +95,12 @@ fun SettingScreen(
                 )
 
                 Spacer(
-                    Modifier.size(48.dp)
+                    Modifier.size(12.dp)
                 )
 
                 Text(
                     text = stringResource(R.string.title_settings),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }

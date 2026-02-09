@@ -147,7 +147,7 @@ fun CustomSearchBar(
         Image(
             modifier = Modifier
                 .height(24.dp)
-                .width(12.dp)
+                .width(16.dp)
                 .clickable(onClick = onBackClick),
             painter = painterResource(R.drawable.icon_back_white),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
@@ -165,7 +165,7 @@ fun CustomSearchBar(
                     Text(
                         text = stringResource(R.string.search_placeholder),
                         color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
-                        fontSize = 14.sp
+                        fontSize = 12.sp
                     )
                 }
                 BasicTextField(
@@ -175,7 +175,7 @@ fun CustomSearchBar(
                     singleLine = true,
                     textStyle = TextStyle(
                         color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 14.sp
+                        fontSize = 12.sp
                     ),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { onSearch(query) }),

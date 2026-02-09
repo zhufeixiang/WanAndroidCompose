@@ -7,9 +7,9 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -122,6 +122,8 @@ fun NavGraphBuilder.composableWithSlideAnimation(
     }
 }
 
+private val defaultBarsVisibleState = mutableStateOf(true)
+
 /**
  * 注册所有路由
  * 使用模块化的方式组织导航配置，提高可维护性
@@ -129,15 +131,15 @@ fun NavGraphBuilder.composableWithSlideAnimation(
 fun NavGraphBuilder.setupNavigation(
     navController: NavController,
     onToggleBars: (Boolean) -> Unit = {},
+    barsVisible: State<Boolean> = defaultBarsVisibleState,
     drawerState: androidx.compose.material3.DrawerState? = null,
-    nestedScrollConnection: androidx.compose.ui.input.nestedscroll.NestedScrollConnection? = null,
     settingViewModel: com.zfx.wanandroidcompose.feature.setting.SettingViewModel? = null
 ) {
     val config = NavConfig(
         navController = navController,
         onToggleBars = onToggleBars,
+        barsVisible = barsVisible,
         drawerState = drawerState,
-        nestedScrollConnection = nestedScrollConnection,
         settingViewModel = settingViewModel
     )
     

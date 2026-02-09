@@ -130,6 +130,7 @@
     
     <!-- 链接页面 -->
     <string name="link_back_button">返回按钮</string>
+    <string name="link_more_button">更多按钮</string>
     
     <!-- 知识体系详情 -->
     <string name="knowledge_detail_back_button">返回按钮</string>

@@ -78,7 +78,7 @@ fun AboutUsScreen(
         ) {
 
             item {
-                Spacer(Modifier.size(20.dp))
+                Spacer(Modifier.size(12.dp))
 
                 Text(
                     text = stringResource(R.string.about_us_app_name),

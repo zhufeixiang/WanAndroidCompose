@@ -1,7 +1,6 @@
 package com.zfx.wanandroidcompose.util
 
 import com.blankj.utilcode.util.SPUtils
-import com.zfx.wanandroidcompose.feature.coin.data.PersonalCoinData
 
 /**
  * 用户信息本地存储工具类

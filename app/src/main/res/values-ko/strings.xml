@@ -72,6 +72,14 @@
     <string name="account_password_empty">비밀번호를 입력하세요！</string>
     <string name="account_login_success">로그인 성공</string>
     <string name="account_register_success">회원가입 성공</string>
+    <string name="account_user_login">사용자 로그인</string>
+    <string name="account_user_register">사용자 회원가입</string>
+    <string name="account_please_login_wanandroid">완안드로이드 계정으로 로그인해 주세요</string>
+    <string name="account_no_account_create_one">계정이 없으신가요? 회원가입</string>
+    <string name="account_already_have_account">이미 계정이 있으신가요? 로그인</string>
+    <string name="account_reenter_password">비밀번호 재입력</string>
+    <string name="account_reenter_password_hint">비밀번호를 다시 입력해 주세요</string>
+    <string name="account_password_not_match">두 번 입력한 비밀번호가 일치하지 않습니다</string>
     
     <!-- 搜索页面 -->
     <string name="search_back_button">뒤로 가기 버튼</string>
@@ -122,6 +130,7 @@
     
     <!-- 链接页面 -->
     <string name="link_back_button">뒤로 가기 버튼</string>
+    <string name="link_more_button">더보기 버튼</string>
     
     <!-- 知识体系详情 -->
     <string name="knowledge_detail_back_button">뒤로 가기 버튼</string>

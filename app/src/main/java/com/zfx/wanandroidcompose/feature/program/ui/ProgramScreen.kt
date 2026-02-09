@@ -1,27 +1,42 @@
 package com.zfx.wanandroidcompose.feature.program.ui
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.zfx.wanandroidcompose.R
 import com.zfx.wanandroidcompose.feature.program.ProgramViewModel
+import com.zfx.wanandroidcompose.navigation.Routes
+import com.zfx.wanandroidcompose.ui.components.ScrollableTopBar
 import kotlinx.coroutines.launch
+
+private val defaultBarsVisibleState = mutableStateOf(true)
 
 /**
  * author : zhufeixiang
@@ -29,35 +44,55 @@ import kotlinx.coroutines.launch
  * des :
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProgramScreen(
     viewModel: ProgramViewModel = viewModel(),
     navController: NavController,
     onToggleBars: (Boolean) -> Unit = {},
-    nestedScrollConnection: NestedScrollConnection? = null
-){
-
+    barsVisible: State<Boolean> = defaultBarsVisibleState,
+    drawerState: androidx.compose.material3.DrawerState? = null
+) {
+    val barsVisibleValue by barsVisible
     val programTree by viewModel.programTree.collectAsState()
     val tabData = remember(programTree) {
-        programTree.map {
-            it.name
-        }
+        programTree.map { it.name }
     }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val pagerState = rememberPagerState(
+        initialPage = 0
+    ) {
+        tabData.size
+    }
+    val scope = rememberCoroutineScope()
+    // 仅 TopBar 随滚动收起，TabBar 始终吸顶
+    val topBarHeight by animateDpAsState(
+        targetValue = if (barsVisibleValue) 40.dp else 0.dp,
+        animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f),
+        label = "topBarHeight"
+    )
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().statusBarsPadding()
     ) {
-        if (tabData.isNotEmpty()){
-
-             val pagerState = rememberPagerState(
-                 initialPage = 0
-             ) {
-                 tabData.size
-             }
-
-            val scope = rememberCoroutineScope()
-
+        Box(
+            modifier = Modifier
+                .height(topBarHeight)
+                .clipToBounds()
+        ) {
+            if (drawerState != null) {
+                ScrollableTopBar(
+                    title = stringResource(R.string.nav_program),
+                    drawerState = drawerState,
+                    scrollBehavior = scrollBehavior,
+                    onTrailingIconClick = { navController.navigate(Routes.SEARCH) },
+                    barsVisible = barsVisibleValue
+                )
+            }
+        }
+        if (tabData.isNotEmpty()) {
             PrimaryScrollableTabRow(
+                modifier = Modifier.height(48.dp),
                 selectedTabIndex = pagerState.currentPage,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -74,8 +109,9 @@ fun ProgramScreen(
                 }
             ) {
                 tabData.forEachIndexed { index, tabNme ->
+                    val selected = index == pagerState.currentPage
                     Tab(
-                        selected = index == pagerState.currentPage,
+                        selected = selected,
                         onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(index)
@@ -84,15 +120,14 @@ fun ProgramScreen(
                         text = {
                             Text(
                                 text = tabNme,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                fontSize = 16.sp
+                                color = if (selected) MaterialTheme.colorScheme.onPrimary
+                                    else MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                                fontSize = 12.sp
                             )
                         }
-
                     )
                 }
             }
-
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.weight(1f),
@@ -104,12 +139,9 @@ fun ProgramScreen(
                     viewModel = viewModel,
                     navController = navController,
                     onToggleBars = onToggleBars,
-                    nestedScrollConnection = nestedScrollConnection
+                    nestedScrollConnection = null
                 )
-
             }
         }
-
-
     }
 }

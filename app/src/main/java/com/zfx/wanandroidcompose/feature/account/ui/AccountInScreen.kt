@@ -129,7 +129,7 @@ fun AccountInScreen(
 
                 Image(
                     modifier = Modifier
-                        .width(12.dp)
+                        .width(16.dp)
                         .height(24.dp)
                         .clickable {
                             navController.popBackStack()
@@ -140,12 +140,12 @@ fun AccountInScreen(
                 )
 
                 Spacer(
-                    Modifier.size(24.dp)
+                    Modifier.size(12.dp)
                 )
 
                 Text(
                     text = if (isLoginMode) stringResource(R.string.account_login) else stringResource(R.string.account_register),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -162,14 +162,14 @@ fun AccountInScreen(
         ) {
             Text(
                 text = if (isLoginMode) stringResource(R.string.account_user_login) else stringResource(R.string.account_user_register),
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.account_please_login_wanandroid),
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
             Spacer(Modifier.height(16.dp))
@@ -242,7 +242,7 @@ fun AccountInScreen(
                 Text(
                     text = if (isLoginMode) stringResource(R.string.account_login) else stringResource(R.string.account_register),
                     color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 13.sp
+                    fontSize = 12.sp
                 )
             }
 
@@ -255,7 +255,7 @@ fun AccountInScreen(
             ) {
                 Text(
                     text = if (isLoginMode) stringResource(R.string.account_no_account_create_one) else stringResource(R.string.account_already_have_account),
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable {
                         isLoginMode = !isLoginMode

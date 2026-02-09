@@ -99,7 +99,7 @@ fun DrawerContent(
                         .size(48.dp)
                         .then(
                             // 只有在未登录时才可点击
-                            if (isLoggedIn) {
+                            if (!isLoggedIn) {
                                 Modifier.clickable {
                                     scope.launch {
                                         drawerState.close()
